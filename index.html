@@ -3,11 +3,244 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Juniper Counter | Point of Sale</title>
+  <title>Juniper Counter POS</title>
+  <style>
+    :root {
+      font-family: Arial, Helvetica, sans-serif;
+      color: #24332a;
+      background: #f5f5f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #dfe3da;
+    }
+
+    header h1 {
+      margin: 0 0 5px;
+      font-size: 24px;
+    }
+
+    header p,
+    main > section p,
+    #products-heading + p {
+      color: #68736a;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    main > section {
+      margin-bottom: 24px;
+    }
+
+    main > section h2 {
+      margin-bottom: 6px;
+      font-size: 22px;
+    }
+
+    main > div {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    #products-heading + p {
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    #products-heading + p + div {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    article,
+    main > div > section[aria-labelledby="cart-heading"] {
+      padding: 18px;
+      border: 1px solid #e1e4dc;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    article h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    article p {
+      margin: 6px 0;
+      color: #68736a;
+      font-size: 14px;
+    }
+
+    article p:nth-of-type(2) {
+      color: #24332a;
+      font-weight: 700;
+    }
+
+    button {
+      padding: 9px 13px;
+      border: 0;
+      border-radius: 7px;
+      background: #355b43;
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #294735;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #9ab98d;
+      outline-offset: 2px;
+    }
+
+    main > div > section[aria-labelledby="cart-heading"] h2 {
+      margin: 0 0 14px;
+      font-size: 18px;
+    }
+
+    #cart-items {
+      min-height: 48px;
+    }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #edf0e9;
+    }
+
+    .row-name {
+      font-weight: 700;
+    }
+
+    .row-detail {
+      margin-top: 4px;
+      color: #68736a;
+      font-size: 13px;
+    }
+
+    .row-end {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .row-price {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .remove-button {
+      padding: 3px 8px;
+      background: #edf0e9;
+      color: #405345;
+    }
+
+    .remove-button:hover {
+      background: #e1e7dc;
+    }
+
+    .empty {
+      padding: 14px 0;
+      color: #68736a;
+      text-align: center;
+    }
+
+    .empty p {
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+
+    main > div > section[aria-labelledby="cart-heading"] > p {
+      margin: 14px 0;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cfd6cb;
+      border-radius: 7px;
+      font: inherit;
+    }
+
+    #checkout {
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    #message {
+      min-height: 20px;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+
+    #message.error {
+      color: #a34232;
+    }
+
+    #message.success {
+      color: #32623e;
+    }
+
+    #change-card[hidden] {
+      display: none;
+    }
+
+    #change-card {
+      padding: 10px;
+      border-radius: 7px;
+      background: #edf3e7;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 16px;
+      }
+
+      main > div {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 420px) {
+      #products-heading + p + div {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Juniper &amp; Co. Point of Sale</h1>
+    <h1>NAME NG BUSIN &amp; Co. Point of Sale</h1>
     <p>Neighborhood food counter</p>
   </header>
 
@@ -73,7 +306,6 @@
   <script>
     "use strict";
 
-    // Separate counters keep the cart state simple and avoid collections.
     let gardenCount = 0;
     let greensCount = 0;
     let soupCount = 0;
