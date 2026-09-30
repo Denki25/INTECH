@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Juniper Counter | Point of Sale</title>
+</head>
+<body>
+  <header>
+    <h1>Juniper &amp; Co. Point of Sale</h1>
+    <p>Neighborhood food counter</p>
+  </header>
+
+  <main>
+    <section aria-labelledby="welcome-heading">
+      <h2 id="welcome-heading">Good food, ready to go.</h2>
+      <p>Choose items from the menu to start an order.</p>
+    </section>
+
+    <div>
+      <section aria-labelledby="products-heading">
+        <h2 id="products-heading">Today's menu</h2>
+        <p>Select a product to add it to the order.</p>
+
+        <div>
+          <article>
+            <h3>Garden focaccia</h3>
+            <p>Roasted veg - whipped feta</p>
+            <p>Price: $8.50</p>
+            <button id="add-garden" type="button">Add</button>
+          </article>
+
+          <article>
+            <h3>Market greens</h3>
+            <p>Herbs - citrus - toasted seeds</p>
+            <p>Price: $7.25</p>
+            <button id="add-greens" type="button">Add</button>
+          </article>
+
+          <article>
+            <h3>Tomato and basil soup</h3>
+            <p>Slow simmered - sourdough</p>
+            <p>Price: $5.75</p>
+            <button id="add-soup" type="button">Add</button>
+          </article>
+
+          <article>
+            <h3>Lemon olive cake</h3>
+            <p>Bright lemon - soft crumb</p>
+            <p>Price: $4.00</p>
+            <button id="add-cake" type="button">Add</button>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="cart-heading">
+        <h2 id="cart-heading">Your order (<span id="cart-count">0</span>)</h2>
+        <div id="cart-items" aria-live="polite"></div>
+
+        <p>Order total: <strong id="total">$0.00</strong></p>
+
+        <label for="cash">Cash received:</label>
+        <input id="cash" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-describedby="message">
+
+        <button id="checkout" type="button">Complete checkout</button>
+        <p id="message" role="status" aria-live="polite"></p>
+        <p id="change-card" hidden>
+          Change due: <strong id="change-amount">$0.00</strong>
+        </p>
+      </section>
+    </div>
+  </main>
+  <script>
+    "use strict";
+
+    // Separate counters keep the cart state simple and avoid collections.
+    let gardenCount = 0;
+    let greensCount = 0;
+    let soupCount = 0;
+    let cakeCount = 0;
+
+    const gardenPrice = 8.50;
+    const greensPrice = 7.25;
+    const soupPrice = 5.75;
+    const cakePrice = 4.00;
+
+    const cartItems = document.getElementById("cart-items");
+    const totalDisplay = document.getElementById("total");
+    const countDisplay = document.getElementById("cart-count");
+    const cashInput = document.getElementById("cash");
+    const message = document.getElementById("message");
+    const changeCard = document.getElementById("change-card");
+    const changeAmount = document.getElementById("change-amount");
+
+    function money(amount) {
+      return "$" + amount.toFixed(2);
+    }
+
+    function getItemCount() {
+      return gardenCount + greensCount + soupCount + cakeCount;
+    }
+
+    function getTotalCents() {
+      return gardenCount * 850 + greensCount * 725 + soupCount * 575 + cakeCount * 400;
+    }
+
+    function showMessage(text, kind) {
+      message.textContent = text;
+      message.className = "message";
+      if (kind) message.classList.add(kind);
+    }
+
+    function addCartRow(name, icon, quantity, price, itemKey) {
+      if (quantity === 0) return;
+
+      const row = document.createElement("div");
+      row.className = "cart-row";
+
+      const main = document.createElement("div");
+      main.className = "row-main";
+
+      const iconElement = document.createElement("span");
+      iconElement.className = "row-icon";
+      iconElement.setAttribute("aria-hidden", "true");
+      iconElement.textContent = icon;
+
+      const details = document.createElement("div");
+      const title = document.createElement("div");
+      title.className = "row-name";
+      title.textContent = name;
+      const quantityText = document.createElement("div");
+      quantityText.className = "row-detail";
+      quantityText.textContent = quantity + " × " + money(price);
+      details.appendChild(title);
+      details.appendChild(quantityText);
+      main.appendChild(iconElement);
+      main.appendChild(details);
+
+      const end = document.createElement("div");
+      end.className = "row-end";
+      const linePrice = document.createElement("span");
+      linePrice.className = "row-price";
+      linePrice.textContent = money(quantity * price);
+
+      const removeButton = document.createElement("button");
+      removeButton.className = "remove-button";
+      removeButton.type = "button";
+      removeButton.textContent = "×";
+      removeButton.setAttribute("aria-label", "Remove one " + name);
+      removeButton.addEventListener("click", function () {
+        removeItem(itemKey);
+      });
+
+      end.appendChild(linePrice);
+      end.appendChild(removeButton);
+      row.appendChild(main);
+      row.appendChild(end);
+      cartItems.appendChild(row);
+    }
+
+    function renderCart() {
+      cartItems.textContent = "";
+      const itemCount = getItemCount();
+
+      if (itemCount === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        const icon = document.createElement("div");
+        icon.className = "empty-icon";
+        icon.setAttribute("aria-hidden", "true");
+        icon.textContent = "🧺";
+        const hint = document.createElement("p");
+        hint.textContent = "Your order is empty for now.";
+        empty.appendChild(icon);
+        empty.appendChild(hint);
+        cartItems.appendChild(empty);
+      } else {
+        addCartRow("Garden focaccia", "🥪", gardenCount, gardenPrice, "garden");
+        addCartRow("Market greens", "🥗", greensCount, greensPrice, "greens");
+        addCartRow("Tomato & basil soup", "🍲", soupCount, soupPrice, "soup");
+        addCartRow("Lemon olive cake", "🍰", cakeCount, cakePrice, "cake");
+      }
+
+      countDisplay.textContent = String(itemCount);
+      countDisplay.setAttribute("aria-label", itemCount + (itemCount === 1 ? " item" : " items"));
+      totalDisplay.textContent = money(getTotalCents() / 100);
+    }
+
+    function addItem(itemKey) {
+      if (itemKey === "garden") gardenCount = gardenCount + 1;
+      if (itemKey === "greens") greensCount = greensCount + 1;
+      if (itemKey === "soup") soupCount = soupCount + 1;
+      if (itemKey === "cake") cakeCount = cakeCount + 1;
+      changeCard.hidden = true;
+      showMessage("Added to your order.", "");
+      renderCart();
+    }
+
+    function removeItem(itemKey) {
+      if (itemKey === "garden" && gardenCount > 0) gardenCount = gardenCount - 1;
+      if (itemKey === "greens" && greensCount > 0) greensCount = greensCount - 1;
+      if (itemKey === "soup" && soupCount > 0) soupCount = soupCount - 1;
+      if (itemKey === "cake" && cakeCount > 0) cakeCount = cakeCount - 1;
+      changeCard.hidden = true;
+      showMessage("One item removed from your order.", "");
+      renderCart();
+    }
+
+    function checkout() {
+      const totalCents = getTotalCents();
+      const cashText = cashInput.value.trim();
+
+      if (totalCents === 0) {
+        changeCard.hidden = true;
+        showMessage("Add at least one item before checkout.", "error");
+        return;
+      }
+
+      if (cashText === "" || Number(cashText) < 0) {
+        changeCard.hidden = true;
+        showMessage("Enter the cash amount received to continue.", "error");
+        cashInput.focus();
+        return;
+      }
+
+      const receivedCents = Math.round(Number(cashText) * 100);
+      if (!Number.isFinite(receivedCents) || receivedCents < totalCents) {
+        changeCard.hidden = true;
+        showMessage("Cash received is less than the order total. Please check the amount.", "error");
+        cashInput.focus();
+        return;
+      }
+
+      const changeCents = receivedCents - totalCents;
+      changeAmount.textContent = money(changeCents / 100);
+      changeCard.hidden = false;
+      showMessage("Payment complete — thank you! Your order is ready.", "success");
+    }
+
+    document.getElementById("add-garden").addEventListener("click", function () {
+      addItem("garden");
+    });
+    document.getElementById("add-greens").addEventListener("click", function () {
+      addItem("greens");
+    });
+    document.getElementById("add-soup").addEventListener("click", function () {
+      addItem("soup");
+    });
+    document.getElementById("add-cake").addEventListener("click", function () {
+      addItem("cake");
+    });
+
+    document.getElementById("checkout").addEventListener("click", checkout);
+    cashInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") checkout();
+    });
+
+    renderCart();
+  </script>
+</body>
+</html>
