@@ -1,10 +1,16 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NAME NG BUSINESS</title>
   <style>
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
     :root {
       font-family: Arial, Helvetica, sans-serif;
       color: #24332a;
@@ -33,8 +39,8 @@
     }
 
     header p,
-    main > section p,
-    #products-heading + p {
+    main>section p,
+    #products-heading+p {
       color: #68736a;
     }
 
@@ -43,35 +49,35 @@
       font-size: 14px;
     }
 
-    main > section {
+    main>section {
       margin-bottom: 24px;
     }
 
-    main > section h2 {
+    main>section h2 {
       margin-bottom: 6px;
       font-size: 22px;
     }
 
-    main > div {
+    main>div {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 320px;
       gap: 22px;
       align-items: start;
     }
 
-    #products-heading + p {
+    #products-heading+p {
       margin-top: 6px;
       font-size: 14px;
     }
 
-    #products-heading + p + div {
+    #products-heading+p+div {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
     article,
-    main > div > section[aria-labelledby="cart-heading"] {
+    main>div>section[aria-labelledby="cart-heading"] {
       padding: 18px;
       border: 1px solid #e1e4dc;
       border-radius: 12px;
@@ -114,9 +120,19 @@
       outline-offset: 2px;
     }
 
-    main > div > section[aria-labelledby="cart-heading"] h2 {
+    main>div>section[aria-labelledby="cart-heading"] h2 {
       margin: 0 0 14px;
       font-size: 18px;
+    }
+
+    #item-field {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+    }
+
+    #item-field input {
+      max-width: 50px;
     }
 
     #cart-items {
@@ -173,7 +189,7 @@
       font-size: 14px;
     }
 
-    main > div > section[aria-labelledby="cart-heading"] > p {
+    main>div>section[aria-labelledby="cart-heading"]>p {
       margin: 14px 0;
     }
 
@@ -226,18 +242,19 @@
         padding: 16px;
       }
 
-      main > div {
+      main>div {
         grid-template-columns: 1fr;
       }
     }
 
     @media (max-width: 420px) {
-      #products-heading + p + div {
+      #products-heading+p+div {
         grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>NAME NG BUSINESS &amp; Point of Sale</h1>
@@ -260,28 +277,56 @@
             <h3>Garden focaccia</h3>
             <p>Roasted veg - whipped feta</p>
             <p>Price: $8.50</p>
-            <button id="add-garden" type="button">Add</button>
+            <div id="item-field">
+              <button id="add-garden" type="button">Add</button>
+                <div id="field-amount">
+                  <button onclick="reduceItem('garden')">-</button>
+                  <input type="number" id="amount-garden" value="1">
+                  <button onclick="incrementItem('garden')">+</button>
+                </div>
+            </div>
           </article>
 
           <article>
             <h3>Market greens</h3>
             <p>Herbs - citrus - toasted seeds</p>
             <p>Price: $7.25</p>
-            <button id="add-greens" type="button">Add</button>
+            <div id="item-field">
+              <button id="add-greens" type="button">Add</button>
+              <div id="field-amount">
+                <button onclick="reduceItem('greens')">-</button>
+                <input type="number" id="amount-greens" value="1">
+                <button onclick="incrementItem('greens')">+</button>
+              </div>
+            </div>
           </article>
 
           <article>
             <h3>Tomato and basil soup</h3>
             <p>Slow simmered - sourdough</p>
             <p>Price: $5.75</p>
-            <button id="add-soup" type="button">Add</button>
+            <div id="item-field">
+              <button id="add-soup" type="button">Add</button>
+              <div id="field-amount">
+                <button onclick="reduceItem('soup')">-</button>
+                <input type="number" id="amount-soup" value="1">
+                <button onclick="incrementItem('soup')">+</button>
+              </div>
+            </div>
           </article>
 
           <article>
             <h3>Lemon olive cake</h3>
             <p>Bright lemon - soft crumb</p>
             <p>Price: $4.00</p>
-            <button id="add-cake" type="button">Add</button>
+            <div id="item-field">
+              <button id="add-cake" type="button">Add</button>
+              <div id="field-amount">
+                <button onclick="reduceItem('cake')">-</button>
+                <input type="number" id="amount-cake" value="1">
+                <button onclick="incrementItem('cake')">+</button>
+              </div>
+            </div>
           </article>
         </div>
       </section>
@@ -293,7 +338,8 @@
         <p>Order total: <strong id="total">$0.00</strong></p>
 
         <label for="cash">Cash received:</label>
-        <input id="cash" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-describedby="message">
+        <input id="cash" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"
+          aria-describedby="message">
 
         <button id="checkout" type="button">Complete checkout</button>
         <p id="message" role="status" aria-live="polite"></p>
@@ -377,14 +423,24 @@
       const removeButton = document.createElement("button");
       removeButton.className = "remove-button";
       removeButton.type = "button";
-      removeButton.textContent = "×";
+      removeButton.textContent = "-";
       removeButton.setAttribute("aria-label", "Remove one " + name);
       removeButton.addEventListener("click", function () {
         removeItem(itemKey);
       });
 
+      const addButton = document.createElement("button");
+      addButton.className = "remove-button";
+      addButton.type = "button";
+      addButton.textContent = "+";
+      addButton.setAttribute("aria-label", "Add one " + name);
+      addButton.addEventListener("click", function () {
+        addItem(itemKey);
+      });
+
       end.appendChild(linePrice);
       end.appendChild(removeButton);
+      end.appendChild(addButton);
       row.appendChild(main);
       row.appendChild(end);
       cartItems.appendChild(row);
@@ -419,10 +475,29 @@
     }
 
     function addItem(itemKey) {
-      if (itemKey === "garden") gardenCount = gardenCount + 1;
-      if (itemKey === "greens") greensCount = greensCount + 1;
-      if (itemKey === "soup") soupCount = soupCount + 1;
-      if (itemKey === "cake") cakeCount = cakeCount + 1;
+      // if (itemKey === "garden") gardenCount = document.getElementById("amount-")
+      // if (itemKey === "greens") greensCount = greensCount + 1;
+      // if (itemKey === "soup") soupCount = soupCount + 1;
+      // if (itemKey === "cake") cakeCount = cakeCount + 1;
+      const amount = document.getElementById(`amount-${itemKey}`).value
+
+      switch (itemKey) {
+        case "garden":
+          gardenCount += amount;
+          break;
+        case "greens":
+          greensCount += amount;
+          break;
+        case "soup":
+          soupCount += amount;
+          break;
+        case "cake":
+          cakeCount += amount;
+          break;
+
+      }
+
+      document.getElementById(`amount-${itemKey}`).value = 1;
       changeCard.hidden = true;
       showMessage("Added to your order.", "");
       renderCart();
@@ -487,7 +562,22 @@
       if (event.key === "Enter") checkout();
     });
 
+    function reduceItem(item) {
+      var value = document.getElementById(`amount-${item}`).value;
+
+      if (value <= 1) return;
+
+      document.getElementById(`amount-${item}`).value = Number(value) - Number(1)
+    }
+
+    function incrementItem(item) {
+      var value = document.getElementById(`amount-${item}`).value;
+
+      document.getElementById(`amount-${item}`).value = Number(value) + Number(1)
+    }
+
     renderCart();
   </script>
 </body>
+
 </html>
