@@ -6,15 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NAME NG BUSINESS</title>
   <style>
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
     :root {
+      --green: #286a43;
+      --dark-green: #1e422d;
+      --yellow: #f8b845;
+      --warm-cream: #fdf6e9;
+      --side-padding: 100px;
+
+      --text: #24332a;
+      --surface: #ffffff;
+      --muted: color-mix(in srgb, var(--dark-green) 70%, var(--warm-cream));
+      --border: color-mix(in srgb, var(--dark-green) 15%, var(--surface));
+      --border-soft: color-mix(in srgb, var(--dark-green) 8%, var(--surface));
+      --border-strong: color-mix(in srgb, var(--dark-green) 22%, var(--surface));
+      --ghost-text: color-mix(in srgb, var(--dark-green) 80%, var(--surface));
+      --focus-ring: color-mix(in srgb, var(--green) 55%, var(--warm-cream));
+      --notice-bg: color-mix(in srgb, var(--green) 10%, var(--surface));
+      --success: var(--green);
+      --error: #a34232;
+
       font-family: Arial, Helvetica, sans-serif;
-      color: #24332a;
-      background: #f5f5f0;
+      color: var(--text);
+      background: var(--warm-cream);
     }
 
     * {
@@ -22,31 +35,30 @@
     }
 
     body {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 24px;
+      margin: 0;
     }
 
     header {
       margin-bottom: 28px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #dfe3da;
+      padding: 24px var(--side-padding) 16px;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--dark-green);
     }
 
     header h1 {
       margin: 0 0 5px;
       font-size: 24px;
-    }
-
-    header p,
-    main>section p,
-    #products-heading+p {
-      color: #68736a;
+      color: var(--surface);
     }
 
     header p {
       margin: 0;
       font-size: 14px;
+      color: var(--muted);
+    }
+
+    main {
+      padding: 0 var(--side-padding);
     }
 
     main>section {
@@ -58,30 +70,43 @@
       font-size: 22px;
     }
 
+    main>section p {
+      color: var(--muted);
+    }
+
     main>div {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 320px;
       gap: 22px;
-      align-items: start;
+      align-items: stretch;
     }
 
-    #products-heading+p {
-      margin-top: 6px;
-      font-size: 14px;
+    article,
+    main>div>section {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background-color: var(--surface);
     }
 
-    #products-heading+p+div {
+    section[aria-labelledby="products-heading"] {
+      padding: 8px 30px 30px 30px;
+    }
+
+    .product-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 16px;
     }
 
     article,
     main>div>section[aria-labelledby="cart-heading"] {
-      padding: 18px;
-      border: 1px solid #e1e4dc;
-      border-radius: 12px;
-      background: #fff;
+      padding: 9px 18px;
+    }
+
+    main>div>section[aria-labelledby="cart-heading"] {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
     }
 
     article h3 {
@@ -91,12 +116,12 @@
 
     article p {
       margin: 6px 0;
-      color: #68736a;
+      color: var(--muted);
       font-size: 14px;
     }
 
-    article p:nth-of-type(2) {
-      color: #24332a;
+    article p.price {
+      color: var(--text);
       font-weight: 700;
     }
 
@@ -104,19 +129,19 @@
       padding: 9px 13px;
       border: 0;
       border-radius: 7px;
-      background: #355b43;
-      color: #fff;
+      background-color: var(--green);
+      color: var(--surface);
       font: inherit;
       cursor: pointer;
     }
 
     button:hover {
-      background: #294735;
+      background-color: var(--dark-green);
     }
 
     button:focus-visible,
     input:focus-visible {
-      outline: 3px solid #9ab98d;
+      outline: 3px solid var(--focus-ring);
       outline-offset: 2px;
     }
 
@@ -125,18 +150,46 @@
       font-size: 18px;
     }
 
-    #item-field {
+    .item-field {
       display: flex;
       flex-direction: row;
       gap: 10px;
     }
 
-    #item-field input {
+    .item-field input {
       max-width: 50px;
     }
 
+    main>div>section[aria-labelledby="cart-heading"]>*:not(#cart-items) {
+      flex-shrink: 0;
+    }
+
     #cart-items {
+      flex: 1 1 0;
+      height: 0;
       min-height: 48px;
+      overflow-y: auto;
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+      align-items: center;
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #badge {
+      padding: 8px;
+      background-color: color-mix(in srgb, var(--yellow) 10%, transparent);
+      border: 2px solid var(--yellow);
+      border-radius: 8px;
+      font-size: small;
+      color: var(--yellow);
+      font-weight: bold;
     }
 
     .cart-row {
@@ -144,7 +197,7 @@
       justify-content: space-between;
       gap: 12px;
       padding: 10px 0;
-      border-bottom: 1px solid #edf0e9;
+      border-bottom: 1px solid var(--border-soft);
     }
 
     .row-name {
@@ -153,7 +206,7 @@
 
     .row-detail {
       margin-top: 4px;
-      color: #68736a;
+      color: var(--muted);
       font-size: 13px;
     }
 
@@ -170,17 +223,17 @@
 
     .remove-button {
       padding: 3px 8px;
-      background: #edf0e9;
-      color: #405345;
+      background-color: var(--border-soft);
+      color: var(--ghost-text);
     }
 
     .remove-button:hover {
-      background: #e1e7dc;
+      background-color: var(--border);
     }
 
     .empty {
       padding: 14px 0;
-      color: #68736a;
+      color: var(--muted);
       text-align: center;
     }
 
@@ -203,9 +256,14 @@
     input {
       width: 100%;
       padding: 10px;
-      border: 1px solid #cfd6cb;
+      border: 1px solid var(--border-strong);
       border-radius: 7px;
       font: inherit;
+    }
+
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     #checkout {
@@ -220,21 +278,21 @@
     }
 
     #message.error {
-      color: #a34232;
+      color: var(--error);
     }
 
     #message.success {
-      color: #32623e;
-    }
-
-    #change-card[hidden] {
-      display: none;
+      color: var(--success);
     }
 
     #change-card {
       padding: 10px;
       border-radius: 7px;
-      background: #edf3e7;
+      background-color: var(--notice-bg);
+    }
+
+    #change-card[hidden] {
+      display: none;
     }
 
     @media (max-width: 700px) {
@@ -245,10 +303,21 @@
       main>div {
         grid-template-columns: 1fr;
       }
+
+      main>div>section[aria-labelledby="cart-heading"]>* {
+        flex-shrink: 1;
+      }
+
+      #cart-items {
+        flex: 0 0 auto;
+        height: auto;
+        min-height: 0;
+        overflow-y: visible;
+      }
     }
 
     @media (max-width: 420px) {
-      #products-heading+p+div {
+      .product-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -269,31 +338,33 @@
 
     <div>
       <section aria-labelledby="products-heading">
-        <h2 id="products-heading">Today's menu</h2>
-        <p>Select a product to add it to the order.</p>
-
-        <div>
+        <div class="section-heading">
+          <h2 id="products-heading">Menu items</h2>
+          <p id="badge">4 items available</p>
+        </div>
+        <hr style="margin-bottom: 20px;">
+        <div class="product-grid">
           <article>
             <h3>Garden focaccia</h3>
             <p>Roasted veg - whipped feta</p>
-            <p>Price: $8.50</p>
-            <div id="item-field">
+            <p class="price">Price: $8.50</p>
+            <div class="item-field">
               <button id="add-garden" type="button">Add</button>
-                <div id="field-amount">
-                  <button onclick="reduceItem('garden')">-</button>
-                  <input type="number" id="amount-garden" value="1">
-                  <button onclick="incrementItem('garden')">+</button>
-                </div>
+              <div class="field-amount">
+                <button onclick="reduceItem('garden')">-</button>
+                <input type="number" id="amount-garden" value="1">
+                <button onclick="incrementItem('garden')">+</button>
+              </div>
             </div>
           </article>
 
           <article>
             <h3>Market greens</h3>
             <p>Herbs - citrus - toasted seeds</p>
-            <p>Price: $7.25</p>
-            <div id="item-field">
+            <p class="price">Price: $7.25</p>
+            <div class="item-field">
               <button id="add-greens" type="button">Add</button>
-              <div id="field-amount">
+              <div class="field-amount">
                 <button onclick="reduceItem('greens')">-</button>
                 <input type="number" id="amount-greens" value="1">
                 <button onclick="incrementItem('greens')">+</button>
@@ -304,10 +375,10 @@
           <article>
             <h3>Tomato and basil soup</h3>
             <p>Slow simmered - sourdough</p>
-            <p>Price: $5.75</p>
-            <div id="item-field">
+            <p class="price">Price: $5.75</p>
+            <div class="item-field">
               <button id="add-soup" type="button">Add</button>
-              <div id="field-amount">
+              <div class="field-amount">
                 <button onclick="reduceItem('soup')">-</button>
                 <input type="number" id="amount-soup" value="1">
                 <button onclick="incrementItem('soup')">+</button>
@@ -318,10 +389,10 @@
           <article>
             <h3>Lemon olive cake</h3>
             <p>Bright lemon - soft crumb</p>
-            <p>Price: $4.00</p>
-            <div id="item-field">
+            <p class="price">Price: $4.00</p>
+            <div class="item-field">
               <button id="add-cake" type="button">Add</button>
-              <div id="field-amount">
+              <div class="field-amount">
                 <button onclick="reduceItem('cake')">-</button>
                 <input type="number" id="amount-cake" value="1">
                 <button onclick="incrementItem('cake')">+</button>
@@ -332,10 +403,16 @@
       </section>
 
       <section aria-labelledby="cart-heading">
-        <h2 id="cart-heading">Your order (<span id="cart-count">0</span>)</h2>
-        <div id="cart-items" aria-live="polite"></div>
+        <div class="section-heading">
+          <h2 id="cart-heading">Your order (<span id="cart-count">0</span>)</h2>
+          <p id="badge">Order 001</p>
+        </div>
+        
 
+        <div id="cart-items" aria-live="polite"></div>
         <p>Order total: <strong id="total">$0.00</strong></p>
+
+
 
         <label for="cash">Cash received:</label>
         <input id="cash" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"
@@ -475,24 +552,20 @@
     }
 
     function addItem(itemKey) {
-      // if (itemKey === "garden") gardenCount = document.getElementById("amount-")
-      // if (itemKey === "greens") greensCount = greensCount + 1;
-      // if (itemKey === "soup") soupCount = soupCount + 1;
-      // if (itemKey === "cake") cakeCount = cakeCount + 1;
       const amount = document.getElementById(`amount-${itemKey}`).value
 
       switch (itemKey) {
         case "garden":
-          gardenCount += amount;
+          gardenCount += Number(amount);
           break;
         case "greens":
-          greensCount += amount;
+          greensCount += Number(amount);
           break;
         case "soup":
-          soupCount += amount;
+          soupCount += Number(amount);
           break;
         case "cake":
-          cakeCount += amount;
+          cakeCount += Number(amount);
           break;
 
       }
