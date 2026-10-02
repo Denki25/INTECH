@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SALO</title>
   <style>
+    
     :root {
       --green: #286a43;
       --dark-green: #1e422d;
@@ -19,7 +20,6 @@
       --border: color-mix(in srgb, var(--dark-green) 15%, var(--surface));
       --border-soft: color-mix(in srgb, var(--dark-green) 8%, var(--surface));
       --border-strong: color-mix(in srgb, var(--dark-green) 22%, var(--surface));
-      --ghost-text: color-mix(in srgb, var(--dark-green) 80%, var(--surface));
       --focus-ring: color-mix(in srgb, var(--green) 55%, var(--warm-cream));
       --notice-bg: color-mix(in srgb, var(--green) 10%, var(--surface));
       --success: var(--green);
@@ -45,8 +45,8 @@
       z-index: 100;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 24px;
+      justify-content: center;
+      gap: 0;
       margin-bottom: 28px;
       padding: 10px var(--side-padding);
       border-bottom: 1px solid color-mix(in srgb, var(--dark-green) 12%, transparent);
@@ -54,56 +54,11 @@
       box-shadow: 0 4px 16px rgb(30 66 45 / 10%);
     }
 
-    .brand {
-      display: flex;
-      min-width: 0;
-      align-items: center;
-      gap: 14px;
-      color: var(--dark-green);
-      text-decoration: none;
-    }
-
     .brand img {
       display: block;
       width: 164px;
       height: 74px;
       object-fit: cover;
-      object-position: center;
-    }
-
-    .brand-copy h1 {
-      margin: 0 0 4px;
-      font-size: 20px;
-      color: var(--dark-green);
-    }
-
-    .brand-copy p {
-      margin: 0;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .primary-nav {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .primary-nav a {
-      padding: 10px 14px;
-      border-radius: 8px;
-      color: var(--dark-green);
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: background-color 160ms ease, color 160ms ease;
-    }
-
-    .primary-nav a:hover,
-    .primary-nav a:focus-visible {
-      background-color: var(--yellow);
-      color: var(--dark-green);
-      outline: none;
     }
 
     main {
@@ -202,11 +157,6 @@
 
     .product-info .item-field { margin-top: auto; padding-top: 8px; }
 
-    article,
-    main>div>section[aria-labelledby="cart-heading"] {
-      padding: 9px 18px;
-    }
-
     main>div>section[aria-labelledby="cart-heading"] {
       position: sticky;
       top: 112px;
@@ -246,7 +196,7 @@
     }
 
     article p.price {
-      color: var(--text);
+      color: #b8860b;
       font-weight: 700;
     }
 
@@ -261,6 +211,24 @@
       transition: background-color 160ms ease, transform 160ms ease;
     }
 
+    .button-content {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .button-icon {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     button:hover {
       background-color: var(--dark-green);
       transform: translateY(-1px);
@@ -273,11 +241,40 @@
     }
 
     main>div>section[aria-labelledby="cart-heading"] h2 {
-      margin: 0 0 14px;
+      margin: 0;
       font-size: 18px;
     }
 
-    #cart-heading { color: var(--dark-green); font-size: 23px !important; }
+    .cart-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .clear-order {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 8px;
+      background: #fff0d7;
+      color: var(--dark-green);
+    }
+
+    .clear-order:hover {
+      background: var(--yellow);
+    }
+
+    .clear-order:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #cart-heading { color: var(--dark-green); }
     #cart-count { color: var(--green); }
 
     .item-field {
@@ -292,14 +289,9 @@
       gap: 8px;
     }
 
-    .item-field input {
+    .field-amount input {
       width: 62px;
-      max-width: 62px;
       text-align: center;
-    }
-
-    .item-field button {
-      min-width: 40px;
     }
 
     main>div>section[aria-labelledby="cart-heading"]>*:not(#cart-items) {
@@ -344,12 +336,43 @@
       from { opacity: 0; transform: translateY(7px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .row-thumbnail { width: 54px; height: 54px; object-fit: cover; border-radius: 12px; }
-    .row-main { min-width: 0; }
-    .row-controls { display: flex; align-items: center; gap: 7px; margin-top: 7px; }
-    .row-controls button { min-width: 28px; padding: 4px 8px; border-radius: 8px; background: #f2eee2; color: var(--dark-green); font-weight: 700; }
-    .row-controls button:hover { background: var(--yellow); }
-    .row-quantity { min-width: 18px; text-align: center; font-size: 13px; }
+
+    .row-thumbnail { 
+      width: 54px; 
+      height: 54px; 
+      object-fit: cover; 
+      border-radius: 12px; 
+    }
+
+    .row-main { 
+      min-width: 0; 
+    }
+
+    .row-controls { 
+      display: flex; 
+      align-items: center; 
+      gap: 7px; 
+      margin-top: 7px; 
+    }
+
+    .row-controls button { 
+      min-width: 28px; 
+      padding: 4px 8px; 
+      border-radius: 8px; 
+      background: #f2eee2; 
+      color: var(--dark-green); 
+      font-weight: 700; 
+    }
+
+    .row-controls button:hover { 
+      background: var(--yellow); 
+    }
+
+    .row-quantity { 
+      min-width: 18px; 
+      text-align: center; 
+      font-size: 13px; 
+    }
 
     .row-name {
       font-weight: 700;
@@ -376,7 +399,7 @@
     .remove-button {
       padding: 4px 8px;
       background-color: #fff0d7;
-      color: var(--ghost-text);
+      color: var(--dark-green);
     }
 
     .remove-button:hover {
@@ -384,7 +407,7 @@
     }
 
     .empty {
-      padding: 24px 0;
+      padding: 24px 8px;
       color: var(--muted);
       text-align: center;
     }
@@ -418,12 +441,19 @@
       font-size: 14px;
     }
 
+    .empty strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--dark-green);
+      font-size: 16px;
+    }
+
     main>div>section[aria-labelledby="cart-heading"]>p {
       margin: 14px 0;
     }
 
     #total { float: right; color: var(--dark-green); font-size: 22px; }
-    #checkout { min-height: 50px; border-radius: 18px; background: var(--dark-green); font-weight: 700; font-size: 16px; }
+    #checkout { width: 100%; min-height: 50px; margin-top: 12px; border-radius: 18px; background: var(--dark-green); font-weight: 700; font-size: 16px; }
     #checkout:hover { background: var(--green); }
 
     label {
@@ -465,11 +495,6 @@
       }
     }
 
-    #checkout {
-      width: 100%;
-      margin-top: 12px;
-    }
-
     #message {
       min-height: 20px;
       margin: 10px 0;
@@ -505,11 +530,8 @@
 
     @media (max-width: 760px) {
       :root { --side-padding: 20px; }
-      header { flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
-      .brand { gap: 8px; }
+      header { padding-top: 8px; padding-bottom: 8px; }
       .brand img { width: 124px; height: 58px; }
-      .primary-nav { gap: 2px; }
-      .primary-nav a { padding: 8px 10px; }
       main>div { grid-template-columns: 1fr; }
       main>div>section[aria-labelledby="cart-heading"] {
         min-height: 0;
@@ -533,10 +555,7 @@
     @media (max-width: 520px) {
       :root { --side-padding: 14px; }
       header { margin-bottom: 20px; }
-      .brand { width: 100%; }
       .brand img { width: 96px; height: 48px; }
-      .primary-nav { width: 100%; justify-content: space-between; }
-      .primary-nav a { flex: 1; padding: 9px 6px; text-align: center; font-size: 13px; }
       main>section h2 { font-size: 20px; }
       section[aria-labelledby="products-heading"] { padding: 16px 14px 20px; }
       .section-heading { gap: 10px; }
@@ -550,8 +569,7 @@
       .product-info p { font-size: 13px; }
       .item-field { gap: 7px; flex-wrap: wrap; }
       .field-amount { gap: 5px; }
-      .field-amount input { width: 48px; max-width: 48px; }
-      .field-amount button, .item-field>button { min-width: 36px; padding: 8px 10px; }
+      .field-amount input { width: 48px; }
       main>div>section[aria-labelledby="cart-heading"] { padding: 30px 12px 12px; }
       .cart-row { grid-template-columns: 46px minmax(0, 1fr) auto; gap: 7px; }
       .row-thumbnail { width: 46px; height: 46px; }
@@ -567,11 +585,6 @@
     <a class="brand" href="#welcome-heading" aria-label="Sale, home">
       <img src="logo.png" alt="SALO food logo">
     </a>
-    <nav class="primary-nav" aria-label="Main navigation">
-      <a href="#welcome-heading">Home</a>
-      <a href="#products-heading">Menu</a>
-      <a href="#cart-heading">Your order</a>
-    </nav>
   </header>
 
   <main>
@@ -594,7 +607,7 @@
               <p>Juicy beef patty, crisp lettuce, tomato, and house sauce.</p>
               <p class="price">Price: ₱80.00</p>
               <div class="item-field">
-                <button id="add-burger" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('burger')">-</button><input type="number" id="amount-burger" value="1"><button onclick="incrementItem('burger')">+</button></div>
+                <button id="add-burger" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('burger')">-</button><input type="number" id="amount-burger" value="1"><button onclick="incrementItem('burger')">+</button></div>
               </div>
             </div>
           </article>
@@ -605,7 +618,7 @@
               <p>Golden-cut potatoes with a lightly salted crispy finish.</p>
               <p class="price">Price: ₱50.00</p>
               <div class="item-field">
-                <button id="add-fries" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('fries')">-</button><input type="number" id="amount-fries" value="1"><button onclick="incrementItem('fries')">+</button></div>
+                <button id="add-fries" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('fries')">-</button><input type="number" id="amount-fries" value="1"><button onclick="incrementItem('fries')">+</button></div>
               </div>
             </div>
           </article>
@@ -616,7 +629,7 @@
               <p>Crispy golden chicken with a tender and juicy center.</p>
               <p class="price">Price: ₱100.00</p>
               <div class="item-field">
-                <button id="add-fried-chicken" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('friedChicken')">-</button><input type="number" id="amount-friedChicken" value="1"><button onclick="incrementItem('friedChicken')">+</button></div>
+                <button id="add-fried-chicken" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('friedChicken')">-</button><input type="number" id="amount-friedChicken" value="1"><button onclick="incrementItem('friedChicken')">+</button></div>
               </div>
             </div>
           </article>
@@ -627,7 +640,7 @@
               <p>Zesty and flavorful chicken with spicy mayo.</p>
               <p class="price">Price: ₱95.00</p>
               <div class="item-field">
-                <button id="add-spicy-burger" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('spicyBurger')">-</button><input type="number" id="amount-spicyBurger" value="1"><button onclick="incrementItem('spicyBurger')">+</button></div>
+                <button id="add-spicy-burger" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('spicyBurger')">-</button><input type="number" id="amount-spicyBurger" value="1"><button onclick="incrementItem('spicyBurger')">+</button></div>
               </div>
             </div>
           </article>
@@ -638,7 +651,7 @@
               <p>Bite-sized and crunchy chicken nuggets.</p>
               <p class="price">Price: ₱60.00</p>
               <div class="item-field">
-                <button id="add-nuggets" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('nuggets')">-</button><input type="number" id="amount-nuggets" value="1"><button onclick="incrementItem('nuggets')">+</button></div>
+                <button id="add-nuggets" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('nuggets')">-</button><input type="number" id="amount-nuggets" value="1"><button onclick="incrementItem('nuggets')">+</button></div>
               </div>
             </div>
           </article>
@@ -649,7 +662,7 @@
               <p>Crispy battered onion rings, served hot.</p>
               <p class="price">Price: ₱55.00</p>
               <div class="item-field">
-                <button id="add-onion-rings" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('onionRings')">-</button><input type="number" id="amount-onionRings" value="1"><button onclick="incrementItem('onionRings')">+</button></div>
+                <button id="add-onion-rings" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('onionRings')">-</button><input type="number" id="amount-onionRings" value="1"><button onclick="incrementItem('onionRings')">+</button></div>
               </div>
             </div>
           </article>
@@ -658,29 +671,29 @@
 
       <section aria-labelledby="cart-heading">
         <div class="bag-handle" aria-hidden="true"></div>
-        <div class="section-heading">
+        <div class="cart-heading">
           <h2 id="cart-heading">Your Order (<span id="cart-count">0</span>)</h2>
+          <button id="clear-order" class="clear-order" type="button" aria-label="Clear order" title="Clear order" disabled>
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v7m6-7v7"></path></svg>
+          </button>
         </div>
 
         <div id="cart-items" aria-live="polite"></div>
-        <p>Subtotal / order total: <strong id="total">₱0.00</strong></p>
-
-
-
+        <p>Order total: <strong id="total">₱0.00</strong></p>
         <label for="cash">Cash received:</label>
         <input id="cash" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"
           aria-describedby="message">
 
-        <button id="checkout" type="button">Place Order</button>
+        <button id="checkout" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 1.9-1.4L22 8H6"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>Place Order</span></button>
         <p id="message" role="status" aria-live="polite"></p>
         <p id="change-card" hidden>
-          Change due: <strong id="change-amount">$0.00</strong>
+          Change due: <strong id="change-amount">₱0.00</strong>
         </p>
       </section>
     </div>
   </main>
   <footer>
-    <p>&copy; 2026 SALO Food</p>
+    <p>&copy; 2026 SALO</p>
     <nav class="social-links" aria-label="Social media">
       <a href="https://www.facebook.com/denricc" target="_blank" rel="noopener noreferrer">Facebook</a>
       <a href="https://www.instagram.com/denrikkkkkk/" target="_blank" rel="noopener noreferrer">Instagram</a>
@@ -689,19 +702,14 @@
   <script>
     "use strict";
 
-    let burgerCount = 0;
-    let friesCount = 0;
-    let friedChickenCount = 0;
-    let spicyBurgerCount = 0;
-    let nuggetsCount = 0;
-    let onionRingsCount = 0;
-
-    const burgerPrice = 80.00;
-    const friesPrice = 50.00;
-    const friedChickenPrice = 100.00;
-    const spicyBurgerPrice = 95.00;
-    const nuggetsPrice = 60.00;
-    const onionRingsPrice = 55.00;
+    const products = {
+      burger: { name: "Classic Burger", price: 80, count: 0 },
+      fries: { name: "Crispy Fries", price: 50, count: 0 },
+      friedChicken: { name: "Fried Chicken", price: 100, count: 0 },
+      spicyBurger: { name: "Spicy Chicken Burger", price: 95, count: 0 },
+      nuggets: { name: "Chicken Nuggets", price: 60, count: 0 },
+      onionRings: { name: "Onion Rings", price: 55, count: 0 }
+    };
 
     const cartItems = document.getElementById("cart-items");
     const totalDisplay = document.getElementById("total");
@@ -710,6 +718,7 @@
     const message = document.getElementById("message");
     const changeCard = document.getElementById("change-card");
     const changeAmount = document.getElementById("change-amount");
+    const clearOrderButton = document.getElementById("clear-order");
     const productImages = Object.fromEntries(Array.from(document.querySelectorAll(".product-card"), card => [
       card.querySelector("h3").textContent.trim(), card.querySelector("img").src
     ]));
@@ -719,11 +728,11 @@
     }
 
     function getItemCount() {
-      return burgerCount + friesCount + friedChickenCount + spicyBurgerCount + nuggetsCount + onionRingsCount;
+      return Object.values(products).reduce((sum, product) => sum + product.count, 0);
     }
 
     function getTotalCents() {
-      return burgerCount * 8000 + friesCount * 5000 + friedChickenCount * 10000 + spicyBurgerCount * 9500 + nuggetsCount * 6000 + onionRingsCount * 5500;
+      return Object.values(products).reduce((sum, product) => sum + product.count * product.price * 100, 0);
     }
 
     function showMessage(text, kind) {
@@ -802,13 +811,16 @@
     function renderCart() {
       cartItems.textContent = "";
       const itemCount = getItemCount();
+      const totalCents = getTotalCents();
+      totalDisplay.textContent = money(totalCents / 100);
       cartItems.classList.toggle("is-empty", itemCount === 0);
+      clearOrderButton.disabled = itemCount === 0;
 
       if (itemCount === 0) {
         const empty = document.createElement("div");
         empty.className = "empty";
         const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        icon.className = "empty-icon";
+        icon.setAttribute("class", "empty-icon");
         icon.setAttribute("viewBox", "0 0 72 56");
         icon.setAttribute("aria-hidden", "true");
         icon.innerHTML = '<line class="sunray" x1="36" y1="2" x2="36" y2="12"></line>' +
@@ -816,79 +828,53 @@
           '<line class="sunray-muted" x1="62" y1="13" x2="55" y2="20"></line>' +
           '<path d="M13 27h46l-5 21a5 5 0 0 1-5 4H23a5 5 0 0 1-5-4z"></path>' +
           '<path d="M20 27l6-9h20l6 9"></path>';
+          
         const hint = document.createElement("p");
-        hint.textContent = "Your order is empty. Add a menu item to get started.";
+        const title = document.createElement("strong");
+        title.textContent = "Your order is empty";
+        hint.textContent = "Add a menu item to get started.";
         empty.appendChild(icon);
+        empty.appendChild(title);
         empty.appendChild(hint);
         cartItems.appendChild(empty);
       } else {
-        addCartRow("Classic Burger", burgerCount, burgerPrice, "burger");
-        addCartRow("Crispy Fries", friesCount, friesPrice, "fries");
-        addCartRow("Fried Chicken", friedChickenCount, friedChickenPrice, "friedChicken");
-        addCartRow("Spicy Chicken Burger", spicyBurgerCount, spicyBurgerPrice, "spicyBurger");
-        addCartRow("Chicken Nuggets", nuggetsCount, nuggetsPrice, "nuggets");
-        addCartRow("Onion Rings", onionRingsCount, onionRingsPrice, "onionRings");
+        Object.entries(products).forEach(([key, product]) => {
+          addCartRow(product.name, product.count, product.price, key);
+        });
       }
 
       countDisplay.textContent = String(itemCount);
       countDisplay.setAttribute("aria-label", itemCount + (itemCount === 1 ? " item" : " items"));
-      totalDisplay.textContent = money(getTotalCents() / 100);
     }
 
     function addItem(itemKey) {
-      const amount = document.getElementById(`amount-${itemKey}`).value
-
-      switch (itemKey) {
-        case "burger":
-          burgerCount += Number(amount);
-          break;
-        case "fries":
-          friesCount += Number(amount);
-          break;
-        case "friedChicken":
-          friedChickenCount += Number(amount);
-          break;
-        case "spicyBurger":
-          spicyBurgerCount += Number(amount);
-          break;
-        case "nuggets":
-          nuggetsCount += Number(amount);
-          break;
-        case "onionRings":
-          onionRingsCount += Number(amount);
-          break;
-
-      }
-
-      document.getElementById(`amount-${itemKey}`).value = 1;
+      const amountInput = document.getElementById(`amount-${itemKey}`);
+      products[itemKey].count += Math.max(1, Number(amountInput.value) || 1);
+      amountInput.value = 1;
       changeCard.hidden = true;
       showMessage("Added to your order.", "");
       renderCart();
     }
 
     function removeItem(itemKey) {
-      if (itemKey === "burger" && burgerCount > 0) burgerCount--;
-      if (itemKey === "fries" && friesCount > 0) friesCount--;
-      if (itemKey === "friedChicken" && friedChickenCount > 0) friedChickenCount--;
-      if (itemKey === "spicyBurger" && spicyBurgerCount > 0) spicyBurgerCount--;
-      if (itemKey === "nuggets" && nuggetsCount > 0) nuggetsCount--;
-      if (itemKey === "onionRings" && onionRingsCount > 0) onionRingsCount--;
+      products[itemKey].count = Math.max(0, products[itemKey].count - 1);
       changeCard.hidden = true;
       showMessage("One item removed from your order.", "");
       renderCart();
     }
 
     function removeAllItem(itemKey) {
-      switch (itemKey) {
-        case "burger": burgerCount = 0; break;
-        case "fries": friesCount = 0; break;
-        case "friedChicken": friedChickenCount = 0; break;
-        case "spicyBurger": spicyBurgerCount = 0; break;
-        case "nuggets": nuggetsCount = 0; break;
-        case "onionRings": onionRingsCount = 0; break;
-      }
+      products[itemKey].count = 0;
       changeCard.hidden = true;
       showMessage("Item removed from your order.", "");
+      renderCart();
+    }
+
+    function clearOrder() {
+      Object.values(products).forEach(product => { product.count = 0; });
+      cashInput.value = "";
+      changeCard.hidden = true;
+      showMessage("Order cleared.", "");
       renderCart();
     }
 
@@ -923,42 +909,25 @@
       showMessage("Payment complete — thank you! Your order is ready.", "success");
     }
 
-    document.getElementById("add-burger").addEventListener("click", function () {
-      addItem("burger");
-    });
-    document.getElementById("add-fries").addEventListener("click", function () {
-      addItem("fries");
-    });
-    document.getElementById("add-fried-chicken").addEventListener("click", function () {
-      addItem("friedChicken");
-    });
-    document.getElementById("add-spicy-burger").addEventListener("click", function () {
-      addItem("spicyBurger");
-    });
-    document.getElementById("add-nuggets").addEventListener("click", function () {
-      addItem("nuggets");
-    });
-    document.getElementById("add-onion-rings").addEventListener("click", function () {
-      addItem("onionRings");
+    Object.keys(products).forEach(itemKey => {
+      const buttonId = itemKey.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+      document.getElementById(`add-${buttonId}`).addEventListener("click", () => addItem(itemKey));
     });
 
     document.getElementById("checkout").addEventListener("click", checkout);
+    clearOrderButton.addEventListener("click", clearOrder);
     cashInput.addEventListener("keydown", function (event) {
       if (event.key === "Enter") checkout();
     });
 
-    function reduceItem(item) {
-      var value = document.getElementById(`amount-${item}`).value;
-
-      if (value <= 1) return;
-
-      document.getElementById(`amount-${item}`).value = Number(value) - Number(1)
+    function reduceItem(itemKey) {
+      const input = document.getElementById(`amount-${itemKey}`);
+      input.value = Math.max(1, (Number(input.value) || 1) - 1);
     }
 
-    function incrementItem(item) {
-      var value = document.getElementById(`amount-${item}`).value;
-
-      document.getElementById(`amount-${item}`).value = Number(value) + Number(1)
+    function incrementItem(itemKey) {
+      const input = document.getElementById(`amount-${itemKey}`);
+      input.value = (Number(input.value) || 1) + 1;
     }
 
     renderCart();
