@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <!--
@@ -108,6 +108,7 @@
 
     main>div {
       display: grid;
+      height: 720px;
       grid-template-columns: minmax(0, 1fr) minmax(300px, 0.38fr);
       gap: 22px;
       align-items: stretch;
@@ -121,13 +122,18 @@
     }
 
     section[aria-labelledby="products-heading"] {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
       min-height: 620px;
       padding: 20px 36px 36px;
     }
 
     .product-grid {
       display: grid;
+      flex: 1;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
@@ -176,7 +182,8 @@
       align-self: start;
       display: flex;
       flex-direction: column;
-      min-height: 520px;
+      height: 100%;
+      min-height: 0;
       padding: 34px 22px 22px;
       border: 8px solid var(--dark-green);
       border-radius: 28px;
@@ -493,7 +500,9 @@
       .product-card,
       .product-image,
       button,
-      .cart-row {
+      .cart-row,
+      .checkout-modal,
+      .checkout-dialog {
         transition: none;
         animation: none;
       }
@@ -532,13 +541,126 @@
       display: none;
     }
 
+    .checkout-modal[hidden],
+    .checkout-change[hidden] {
+      display: none;
+    }
+
+    .checkout-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgb(20 38 27 / 58%);
+      animation: modal-fade-in 160ms ease-out;
+    }
+
+    .checkout-dialog {
+      position: relative;
+      width: min(100%, 420px);
+      padding: 34px 30px 28px;
+      border: 6px solid var(--dark-green);
+      border-radius: 26px;
+      background: #fffdf7;
+      box-shadow: 0 24px 70px rgb(0 0 0 / 28%);
+      text-align: center;
+      animation: modal-pop-in 180ms ease-out;
+    }
+
+    .checkout-modal-icon {
+      display: grid;
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 14px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--notice-bg);
+      color: var(--green);
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .checkout-modal-icon.error {
+      background: #f8e8e3;
+      color: var(--error);
+    }
+
+    .checkout-dialog h2 {
+      margin: 0 0 10px;
+      color: var(--dark-green);
+      font-size: 23px;
+    }
+
+    .checkout-dialog p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .checkout-change {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--notice-bg);
+      color: var(--dark-green);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .checkout-dialog button {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 22px;
+      border-radius: 14px;
+      font-weight: 700;
+    }
+
+    .checkout-modal-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 36px !important;
+      min-height: 36px !important;
+      margin: 0 !important;
+      padding: 0;
+      border-radius: 50% !important;
+      background: transparent;
+      color: var(--dark-green);
+      font-size: 24px;
+    }
+
+    .checkout-modal-close:hover {
+      background: var(--notice-bg);
+      transform: none;
+    }
+
+    @keyframes modal-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes modal-pop-in {
+      from { opacity: 0; transform: translateY(8px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     @media (max-width: 1050px) {
       :root { --side-padding: 28px; }
       main>div {
+        height: auto;
         grid-template-columns: minmax(0, 1fr) minmax(280px, 0.7fr);
+        align-items: start;
       }
-      section[aria-labelledby="products-heading"] { padding: 20px 22px 28px; }
-      .product-grid { grid-template-columns: 1fr; }
+      section[aria-labelledby="products-heading"] { height: auto; padding: 20px 22px 28px; }
+      main>div>section[aria-labelledby="cart-heading"] { height: auto; min-height: 520px; }
+      .product-grid {
+        flex: 0 0 auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+      }
     }
 
     @media (max-width: 760px) {
@@ -691,6 +813,16 @@
       <a href="https://www.instagram.com/denrikkkkkk/" target="_blank" rel="noopener noreferrer">Instagram</a>
     </nav>
   </footer>
+  <div id="checkout-modal" class="checkout-modal" hidden>
+    <section class="checkout-dialog" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title" aria-describedby="checkout-modal-message" tabindex="-1">
+      <button id="close-checkout-modal" class="checkout-modal-close" type="button" aria-label="Close message">×</button>
+      <div id="checkout-modal-icon" class="checkout-modal-icon" aria-hidden="true">✓</div>
+      <h2 id="checkout-modal-title">Order complete!</h2>
+      <p id="checkout-modal-message"></p>
+      <div id="checkout-modal-change" class="checkout-change" hidden></div>
+      <button id="continue-shopping" type="button">Continue</button>
+    </section>
+  </div>
   <script>
     "use strict";
 
@@ -707,6 +839,36 @@
     const changeCard = document.getElementById("change-card");
     const changeAmount = document.getElementById("change-amount");
     const clearOrderButton = document.getElementById("clear-order");
+    const checkoutModal = document.getElementById("checkout-modal");
+    const checkoutDialog = document.querySelector(".checkout-dialog");
+    const checkoutModalIcon = document.getElementById("checkout-modal-icon");
+    const checkoutModalTitle = document.getElementById("checkout-modal-title");
+    const checkoutModalMessage = document.getElementById("checkout-modal-message");
+    const checkoutModalChange = document.getElementById("checkout-modal-change");
+    let focusCashAfterModal = false;
+    let clearOrderAfterContinue = false;
+
+    function showCheckoutModal(title, messageText, kind, changeText) {
+      checkoutModalTitle.textContent = title;
+      checkoutModalMessage.textContent = messageText;
+      checkoutModalIcon.textContent = kind === "success" ? "✓" : "!";
+      checkoutModalIcon.className = "checkout-modal-icon " + kind;
+      checkoutModalChange.textContent = changeText;
+      checkoutModalChange.hidden = changeText === "";
+      checkoutModal.hidden = false;
+      checkoutDialog.focus();
+    }
+
+    function closeCheckoutModal() {
+      checkoutModal.hidden = true;
+      if (focusCashAfterModal) {
+        focusCashAfterModal = false;
+        cashInput.focus();
+      } else {
+        document.getElementById("checkout").focus();
+      }
+    }
+
     function money(amount) {
       return "₱" + amount.toFixed(2);
     }
@@ -912,45 +1074,69 @@
 
       if (totalCents === 0) {
         changeCard.hidden = true;
-        showMessage("Add at least one item before checkout.", "error");
+        showMessage("", "");
+        focusCashAfterModal = false;
+        clearOrderAfterContinue = false;
+        showCheckoutModal("Your order is empty", "Add at least one menu item before checkout.", "error", "");
         return;
       }
 
       if (cashText === "" || Number(cashText) < 0) {
         changeCard.hidden = true;
-        showMessage("Enter the cash amount received to continue.", "error");
-        cashInput.focus();
+        showMessage("", "");
+        focusCashAfterModal = true;
+        clearOrderAfterContinue = false;
+        showCheckoutModal("Cash amount needed", "Enter the cash amount received to continue.", "error", "");
         return;
       }
 
       const receivedCents = Math.round(Number(cashText) * 100);
       if (!Number.isFinite(receivedCents) || receivedCents < totalCents) {
         changeCard.hidden = true;
-        showMessage("Cash received is less than the order total. Please check the amount.", "error");
-        cashInput.focus();
+        showMessage("", "");
+        focusCashAfterModal = true;
+        clearOrderAfterContinue = false;
+        showCheckoutModal("Not enough cash", "Cash received is less than the order total. Please check the amount.", "error", "");
         return;
       }
 
       const changeCents = receivedCents - totalCents;
       changeAmount.textContent = money(changeCents / 100);
-      changeCard.hidden = false;
-      showMessage("Payment complete — thank you! Your order is ready.", "success");
+      changeCard.hidden = true;
+      showMessage("", "");
+      focusCashAfterModal = false;
+      clearOrderAfterContinue = true;
+      showCheckoutModal("Payment complete!", "Thank you. Your order is ready.", "success", "Change due: " + money(changeCents / 100));
     }
 
-    document.getElementById("add-burger").addEventListener("click", () => addItem("burger"));
-    document.getElementById("add-fries").addEventListener("click", () => addItem("fries"));
-    document.getElementById("add-fried-chicken").addEventListener("click", () => addItem("chicken"));
-    document.getElementById("add-spicy-burger").addEventListener("click", () => addItem("spicyBurger"));
-    document.getElementById("minus-burger").addEventListener("click", () => reduceItem("burger"));
-    document.getElementById("plus-burger").addEventListener("click", () => incrementItem("burger"));
-    document.getElementById("minus-fries").addEventListener("click", () => reduceItem("fries"));
-    document.getElementById("plus-fries").addEventListener("click", () => incrementItem("fries"));
-    document.getElementById("minus-chicken").addEventListener("click", () => reduceItem("chicken"));
-    document.getElementById("plus-chicken").addEventListener("click", () => incrementItem("chicken"));
-    document.getElementById("minus-spicyBurger").addEventListener("click", () => reduceItem("spicyBurger"));
-    document.getElementById("plus-spicyBurger").addEventListener("click", () => incrementItem("spicyBurger"));
+    document.getElementById("add-burger").addEventListener("click", function () { addItem("burger"); });
+    document.getElementById("add-fries").addEventListener("click", function () { addItem("fries"); });
+    document.getElementById("add-fried-chicken").addEventListener("click", function () { addItem("chicken"); });
+    document.getElementById("add-spicy-burger").addEventListener("click", function () { addItem("spicyBurger"); });
+    document.getElementById("minus-burger").addEventListener("click", function () { reduceItem("burger"); });
+    document.getElementById("plus-burger").addEventListener("click", function () { incrementItem("burger"); });
+    document.getElementById("minus-fries").addEventListener("click", function () { reduceItem("fries"); });
+    document.getElementById("plus-fries").addEventListener("click", function () { incrementItem("fries"); });
+    document.getElementById("minus-chicken").addEventListener("click", function () { reduceItem("chicken"); });
+    document.getElementById("plus-chicken").addEventListener("click", function () { incrementItem("chicken"); });
+    document.getElementById("minus-spicyBurger").addEventListener("click", function () { reduceItem("spicyBurger"); });
+    document.getElementById("plus-spicyBurger").addEventListener("click", function () { incrementItem("spicyBurger"); });
 
     document.getElementById("checkout").addEventListener("click", checkout);
+    document.getElementById("close-checkout-modal").addEventListener("click", closeCheckoutModal);
+    document.getElementById("continue-shopping").addEventListener("click", function () {
+      closeCheckoutModal();
+      if (clearOrderAfterContinue) {
+        clearOrderAfterContinue = false;
+        clearOrder();
+      }
+    });
+    checkoutModal.addEventListener("click", function (event) {
+      if (event.target === checkoutModal) closeCheckoutModal();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !checkoutModal.hidden) closeCheckoutModal();
+    });
     clearOrderButton.addEventListener("click", clearOrder);
     cashInput.addEventListener("keydown", function (event) {
       if (event.key === "Enter") checkout();
@@ -967,6 +1153,7 @@
     }
 
     renderCart();
+    
   </script>
 </body>
 
