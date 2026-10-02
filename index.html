@@ -531,16 +531,6 @@
       color: var(--success);
     }
 
-    #change-card {
-      padding: 10px;
-      border-radius: 7px;
-      background-color: var(--notice-bg);
-    }
-
-    #change-card[hidden] {
-      display: none;
-    }
-
     .checkout-modal[hidden],
     .checkout-change[hidden] {
       display: none;
@@ -800,9 +790,6 @@
 
         <button id="checkout" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 1.9-1.4L22 8H6"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>Place Order</span></button>
         <p id="message" role="status" aria-live="polite"></p>
-        <p id="change-card" hidden>
-          Change due: <strong id="change-amount">₱0.00</strong>
-        </p>
       </section>
     </div>
   </main>
@@ -836,8 +823,6 @@
     const countDisplay = document.getElementById("cart-count");
     const cashInput = document.getElementById("cash");
     const message = document.getElementById("message");
-    const changeCard = document.getElementById("change-card");
-    const changeAmount = document.getElementById("change-amount");
     const clearOrderButton = document.getElementById("clear-order");
     const checkoutModal = document.getElementById("checkout-modal");
     const checkoutDialog = document.querySelector(".checkout-dialog");
@@ -1025,14 +1010,13 @@
     }
 
     function addItem(itemKey) {
-      const amountInput = document.getElementById(`amount-${itemKey}`);
+      const amountInput = document.getElementById("amount-" + itemKey);
       const amount = Math.max(1, Number(amountInput.value) || 1);
       if (itemKey === "burger") burgerCount += amount;
       if (itemKey === "fries") friesCount += amount;
       if (itemKey === "chicken") chickenCount += amount;
       if (itemKey === "spicyBurger") spicyBurgerCount += amount;
       amountInput.value = 1;
-      changeCard.hidden = true;
       showMessage("Added to your order.", "");
       renderCart();
     }
@@ -1042,7 +1026,6 @@
       if (itemKey === "fries" && friesCount > 0) friesCount--;
       if (itemKey === "chicken" && chickenCount > 0) chickenCount--;
       if (itemKey === "spicyBurger" && spicyBurgerCount > 0) spicyBurgerCount--;
-      changeCard.hidden = true;
       showMessage("One item removed from your order.", "");
       renderCart();
     }
@@ -1052,7 +1035,6 @@
       if (itemKey === "fries") friesCount = 0;
       if (itemKey === "chicken") chickenCount = 0;
       if (itemKey === "spicyBurger") spicyBurgerCount = 0;
-      changeCard.hidden = true;
       showMessage("Item removed from your order.", "");
       renderCart();
     }
@@ -1063,7 +1045,6 @@
       chickenCount = 0;
       spicyBurgerCount = 0;
       cashInput.value = "";
-      changeCard.hidden = true;
       showMessage("Order cleared.", "");
       renderCart();
     }
@@ -1073,8 +1054,7 @@
       const cashText = cashInput.value.trim();
 
       if (totalCents === 0) {
-        changeCard.hidden = true;
-        showMessage("", "");
+        showMessage("Add at least one item before checkout.", "error");
         focusCashAfterModal = false;
         clearOrderAfterContinue = false;
         showCheckoutModal("Your order is empty", "Add at least one menu item before checkout.", "error", "");
@@ -1082,8 +1062,7 @@
       }
 
       if (cashText === "" || Number(cashText) < 0) {
-        changeCard.hidden = true;
-        showMessage("", "");
+        showMessage("Enter the cash amount received to continue.", "error");
         focusCashAfterModal = true;
         clearOrderAfterContinue = false;
         showCheckoutModal("Cash amount needed", "Enter the cash amount received to continue.", "error", "");
@@ -1092,8 +1071,7 @@
 
       const receivedCents = Math.round(Number(cashText) * 100);
       if (!Number.isFinite(receivedCents) || receivedCents < totalCents) {
-        changeCard.hidden = true;
-        showMessage("", "");
+        showMessage("Cash received is less than the order total. Please check the amount.", "error");
         focusCashAfterModal = true;
         clearOrderAfterContinue = false;
         showCheckoutModal("Not enough cash", "Cash received is less than the order total. Please check the amount.", "error", "");
@@ -1101,9 +1079,7 @@
       }
 
       const changeCents = receivedCents - totalCents;
-      changeAmount.textContent = money(changeCents / 100);
-      changeCard.hidden = true;
-      showMessage("", "");
+      showMessage("Payment complete! Change due: " + money(changeCents / 100), "success");
       focusCashAfterModal = false;
       clearOrderAfterContinue = true;
       showCheckoutModal("Payment complete!", "Thank you. Your order is ready.", "success", "Change due: " + money(changeCents / 100));
@@ -1143,12 +1119,12 @@
     });
 
     function reduceItem(itemKey) {
-      const input = document.getElementById(`amount-${itemKey}`);
+      const input = document.getElementById("amount-" + itemKey);
       input.value = Math.max(1, (Number(input.value) || 1) - 1);
     }
 
     function incrementItem(itemKey) {
-      const input = document.getElementById(`amount-${itemKey}`);
+      const input = document.getElementById("amount-" + itemKey);
       input.value = (Number(input.value) || 1) + 1;
     }
 
