@@ -10,8 +10,8 @@
       --green: #286a43;
       --dark-green: #1e422d;
       --yellow: #f8b845;
-      --warm-cream: #fdf6e9;
-      --side-padding: 100px;
+      --warm-cream: #f1f5f1;
+      --side-padding: clamp(20px, 6vw, 100px);
 
       --text: #24332a;
       --surface: #ffffff;
@@ -36,30 +36,94 @@
 
     body {
       margin: 0;
+      min-width: 320px;
     }
 
     header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
       margin-bottom: 28px;
-      padding: 24px var(--side-padding) 16px;
-      border-bottom: 1px solid var(--border);
-      background-color: var(--dark-green);
+      padding: 10px var(--side-padding);
+      border-bottom: 1px solid color-mix(in srgb, var(--dark-green) 12%, transparent);
+      background-color: var(--surface);
+      box-shadow: 0 4px 16px rgb(30 66 45 / 10%);
     }
 
-    header h1 {
-      margin: 0 0 5px;
-      font-size: 24px;
-      color: var(--surface);
+    .brand {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 14px;
+      color: var(--dark-green);
+      text-decoration: none;
     }
 
-    header p {
+    .brand img {
+      display: block;
+      width: 164px;
+      height: 74px;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .brand-copy h1 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      color: var(--dark-green);
+    }
+
+    .brand-copy p {
       margin: 0;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--muted);
+    }
+
+    .primary-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .primary-nav a {
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: var(--dark-green);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background-color 160ms ease, color 160ms ease;
+    }
+
+    .primary-nav a:hover,
+    .primary-nav a:focus-visible {
+      background-color: var(--yellow);
+      color: var(--dark-green);
+      outline: none;
     }
 
     main {
       padding: 0 var(--side-padding);
     }
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 36px;
+      padding: 22px var(--side-padding);
+      background: var(--dark-green);
+      color: var(--warm-cream);
+    }
+    footer p { margin: 0; }
+    .social-links { display: flex; gap: 18px; }
+    .social-links a { color: inherit; font-weight: 700; text-decoration: none; }
+    .social-links a:hover, .social-links a:focus-visible { color: var(--yellow); }
 
     main>section {
       margin-bottom: 24px;
@@ -76,7 +140,7 @@
 
     main>div {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 320px;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.38fr);
       gap: 22px;
       align-items: stretch;
     }
@@ -89,14 +153,54 @@
     }
 
     section[aria-labelledby="products-heading"] {
-      padding: 8px 30px 30px 30px;
+      min-height: 620px;
+      padding: 20px 36px 36px;
     }
 
     .product-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 14px;
     }
+
+    .product-card {
+      display: grid;
+      grid-template-columns: clamp(88px, 8vw, 112px) minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      min-height: 142px;
+      padding: 12px;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-strong);
+      box-shadow: 0 10px 24px rgb(30 66 45 / 12%);
+    }
+
+    .product-image {
+      display: block;
+      width: 100%;
+      height: clamp(88px, 8vw, 112px);
+      object-fit: cover;
+      border-radius: 8px;
+      background-color: #fafafa;
+      transition: transform 180ms ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.04);
+    }
+
+    .product-info {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .product-info .item-field { margin-top: auto; padding-top: 8px; }
 
     article,
     main>div>section[aria-labelledby="cart-heading"] {
@@ -106,7 +210,7 @@
     main>div>section[aria-labelledby="cart-heading"] {
       display: flex;
       flex-direction: column;
-      min-height: 0;
+      min-height: 620px;
     }
 
     article h3 {
@@ -133,10 +237,12 @@
       color: var(--surface);
       font: inherit;
       cursor: pointer;
+      transition: background-color 160ms ease, transform 160ms ease;
     }
 
     button:hover {
       background-color: var(--dark-green);
+      transform: translateY(-1px);
     }
 
     button:focus-visible,
@@ -152,12 +258,24 @@
 
     .item-field {
       display: flex;
-      flex-direction: row;
-      gap: 10px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .field-amount {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .item-field input {
-      max-width: 50px;
+      width: 62px;
+      max-width: 62px;
+      text-align: center;
+    }
+
+    .item-field button {
+      min-width: 40px;
     }
 
     main>div>section[aria-labelledby="cart-heading"]>*:not(#cart-items) {
@@ -165,15 +283,21 @@
     }
 
     #cart-items {
+      display: flex;
+      flex-direction: column;
       flex: 1 1 0;
       height: 0;
-      min-height: 48px;
+      min-height: 280px;
       overflow-y: auto;
       border-top: 1px solid black;
       border-bottom: 1px solid black;
-      align-items: center;
       padding-top: 2px;
       padding-bottom: 2px;
+    }
+
+    #cart-items.is-empty {
+      justify-content: center;
+      align-items: center;
     }
 
     .section-heading {
@@ -232,9 +356,33 @@
     }
 
     .empty {
-      padding: 14px 0;
+      padding: 24px 0;
       color: var(--muted);
       text-align: center;
+    }
+
+    .empty-icon {
+      display: block;
+      width: 72px;
+      height: 56px;
+      margin: 0 auto 8px;
+    }
+
+    .empty-icon path,
+    .empty-icon line {
+      fill: none;
+      stroke: var(--dark-green);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 3.5;
+    }
+
+    .empty-icon .sunray {
+      stroke: var(--yellow);
+    }
+
+    .empty-icon .sunray-muted {
+      stroke: color-mix(in srgb, var(--yellow) 55%, var(--surface));
     }
 
     .empty p {
@@ -266,6 +414,23 @@
       margin: 0;
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      .product-card,
+      .product-image,
+      button {
+        transition: none;
+      }
+
+      .product-card:hover,
+      button:hover {
+        transform: none;
+      }
+
+      .product-card:hover .product-image {
+        transform: none;
+      }
+    }
+
     #checkout {
       width: 100%;
       margin-top: 12px;
@@ -295,13 +460,25 @@
       display: none;
     }
 
-    @media (max-width: 700px) {
-      body {
-        padding: 16px;
-      }
-
+    @media (max-width: 1050px) {
+      :root { --side-padding: 28px; }
       main>div {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.7fr);
+      }
+      section[aria-labelledby="products-heading"] { padding: 20px 22px 28px; }
+      .product-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      :root { --side-padding: 20px; }
+      header { flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+      .brand { gap: 8px; }
+      .brand img { width: 124px; height: 58px; }
+      .primary-nav { gap: 2px; }
+      .primary-nav a { padding: 8px 10px; }
+      main>div { grid-template-columns: 1fr; }
+      main>div>section[aria-labelledby="cart-heading"] {
+        min-height: 0;
       }
 
       main>div>section[aria-labelledby="cart-heading"]>* {
@@ -311,23 +488,51 @@
       #cart-items {
         flex: 0 0 auto;
         height: auto;
-        min-height: 0;
+        min-height: 180px;
         overflow-y: visible;
       }
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: 520px) {
+      :root { --side-padding: 14px; }
+      header { margin-bottom: 20px; }
+      .brand { width: 100%; }
+      .brand img { width: 96px; height: 48px; }
+      .primary-nav { width: 100%; justify-content: space-between; }
+      .primary-nav a { flex: 1; padding: 9px 6px; text-align: center; font-size: 13px; }
+      main>section h2 { font-size: 20px; }
+      section[aria-labelledby="products-heading"] { padding: 16px 14px 20px; }
+      .section-heading { gap: 10px; }
+      .section-heading p { text-align: right; }
       .product-grid {
         grid-template-columns: 1fr;
       }
+      .product-card { grid-template-columns: 84px minmax(0, 1fr); gap: 10px; padding: 8px 2px; }
+      .product-image { height: 84px; }
+      .product-info h3 { font-size: 15px; }
+      .product-info p { font-size: 13px; }
+      .item-field { gap: 7px; flex-wrap: wrap; }
+      .field-amount { gap: 5px; }
+      .field-amount input { width: 48px; max-width: 48px; }
+      .field-amount button, .item-field>button { min-width: 36px; padding: 8px 10px; }
+      main>div>section[aria-labelledby="cart-heading"] { padding: 12px; }
+      .cart-row { gap: 8px; flex-wrap: wrap; }
+      .row-end { gap: 6px; }
+      footer { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>NAME NG BUSINESS &amp; Point of Sale</h1>
-    <p>Neighborhood food counter</p>
+    <a class="brand" href="#welcome-heading" aria-label="Sale, home">
+      <img src="sale-logo.png" alt="SALO food logo">
+    </a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="#welcome-heading">Home</a>
+      <a href="#products-heading">Menu</a>
+      <a href="#cart-heading">Your order</a>
+    </nav>
   </header>
 
   <main>
@@ -340,62 +545,72 @@
       <section aria-labelledby="products-heading">
         <div class="section-heading">
           <h2 id="products-heading">Menu items</h2>
-          <p id="badge">4 items available</p>
+          <p>6 items available</p>
         </div>
         <hr style="margin-bottom: 20px;">
         <div class="product-grid">
-          <article>
-            <h3>Garden focaccia</h3>
-            <p>Roasted veg - whipped feta</p>
-            <p class="price">Price: $8.50</p>
-            <div class="item-field">
-              <button id="add-garden" type="button">Add</button>
-              <div class="field-amount">
-                <button onclick="reduceItem('garden')">-</button>
-                <input type="number" id="amount-garden" value="1">
-                <button onclick="incrementItem('garden')">+</button>
+          <article class="product-card">
+            <img class="product-image" src="https://tblg.k-img.com/restaurant/images/Rvw/228988/640x640_rect_ce1d786cd36513639801a930125f9f1b.jpg" alt="Classic beef burger with lettuce, tomato, onion, and fries" loading="lazy">
+            <div class="product-info"><h3>Classic Burger</h3>
+              <p>Juicy beef patty, crisp lettuce, tomato, and house sauce.</p>
+              <p class="price">Price: ₱80.00</p>
+              <div class="item-field">
+                <button id="add-burger" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('burger')">-</button><input type="number" id="amount-burger" value="1"><button onclick="incrementItem('burger')">+</button></div>
               </div>
             </div>
           </article>
 
-          <article>
-            <h3>Market greens</h3>
-            <p>Herbs - citrus - toasted seeds</p>
-            <p class="price">Price: $7.25</p>
-            <div class="item-field">
-              <button id="add-greens" type="button">Add</button>
-              <div class="field-amount">
-                <button onclick="reduceItem('greens')">-</button>
-                <input type="number" id="amount-greens" value="1">
-                <button onclick="incrementItem('greens')">+</button>
+          <article class="product-card">
+            <img class="product-image" src="https://parade.com/.image/ODowMDAwMDAwMDAwODY3NzE4/french-fries-with-ketchupmore-of-your-fried-favorites-stockpack-gettyimages.jpg?ar=4-3&io=1&profile=w2560" alt="Golden french fries served with ketchup" loading="lazy">
+            <div class="product-info"><h3>Crispy Fries</h3>
+              <p>Golden-cut potatoes with a lightly salted crispy finish.</p>
+              <p class="price">Price: ₱50.00</p>
+              <div class="item-field">
+                <button id="add-fries" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('fries')">-</button><input type="number" id="amount-fries" value="1"><button onclick="incrementItem('fries')">+</button></div>
               </div>
             </div>
           </article>
 
-          <article>
-            <h3>Tomato and basil soup</h3>
-            <p>Slow simmered - sourdough</p>
-            <p class="price">Price: $5.75</p>
-            <div class="item-field">
-              <button id="add-soup" type="button">Add</button>
-              <div class="field-amount">
-                <button onclick="reduceItem('soup')">-</button>
-                <input type="number" id="amount-soup" value="1">
-                <button onclick="incrementItem('soup')">+</button>
+          <article class="product-card">
+            <img class="product-image" src="https://f.ptcdn.info/069/088/000/maxnahnaizLY9mszLYG-o.jpg" alt="Golden crispy fried chicken pieces" loading="lazy">
+            <div class="product-info"><h3>Fried Chicken</h3>
+              <p>Crispy golden chicken with a tender and juicy center.</p>
+              <p class="price">Price: ₱100.00</p>
+              <div class="item-field">
+                <button id="add-fried-chicken" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('friedChicken')">-</button><input type="number" id="amount-friedChicken" value="1"><button onclick="incrementItem('friedChicken')">+</button></div>
               </div>
             </div>
           </article>
 
-          <article>
-            <h3>Lemon olive cake</h3>
-            <p>Bright lemon - soft crumb</p>
-            <p class="price">Price: $4.00</p>
-            <div class="item-field">
-              <button id="add-cake" type="button">Add</button>
-              <div class="field-amount">
-                <button onclick="reduceItem('cake')">-</button>
-                <input type="number" id="amount-cake" value="1">
-                <button onclick="incrementItem('cake')">+</button>
+          <article class="product-card">
+            <img class="product-image" src="https://images.deliveryhero.io/image/fd-pk/products/16371401.jpg?width=%25s" alt="Spicy crispy chicken burger with lettuce and pickles" loading="lazy">
+            <div class="product-info"><h3>Spicy Chicken Burger</h3>
+              <p>Zesty and flavorful chicken with spicy mayo.</p>
+              <p class="price">Price: ₱95.00</p>
+              <div class="item-field">
+                <button id="add-spicy-burger" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('spicyBurger')">-</button><input type="number" id="amount-spicyBurger" value="1"><button onclick="incrementItem('spicyBurger')">+</button></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <img class="product-image" src="https://cdnd.techpack.mn/ext/2011555/Chicken_nuggets.jpg" alt="Crispy chicken nuggets served with ketchup" loading="lazy">
+            <div class="product-info"><h3>Chicken Nuggets</h3>
+              <p>Bite-sized and crunchy chicken nuggets.</p>
+              <p class="price">Price: ₱60.00</p>
+              <div class="item-field">
+                <button id="add-nuggets" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('nuggets')">-</button><input type="number" id="amount-nuggets" value="1"><button onclick="incrementItem('nuggets')">+</button></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <img class="product-image" src="https://images.deliveryhero.io/image/global-menu-service/GV_IT/vendor/678076/product/9007146515/fa0f9450-6fec-4ed0-be8a-37cfbce976fc.jpg" alt="Crispy golden onion rings with ketchup" loading="lazy">
+            <div class="product-info"><h3>Onion Rings</h3>
+              <p>Crispy battered onion rings, served hot.</p>
+              <p class="price">Price: ₱55.00</p>
+              <div class="item-field">
+                <button id="add-onion-rings" type="button">Add</button><div class="field-amount"><button onclick="reduceItem('onionRings')">-</button><input type="number" id="amount-onionRings" value="1"><button onclick="incrementItem('onionRings')">+</button></div>
               </div>
             </div>
           </article>
@@ -426,18 +641,29 @@
       </section>
     </div>
   </main>
+  <footer>
+    <p>&copy; 2026 SALO Food</p>
+    <nav class="social-links" aria-label="Social media">
+      <a href="https://www.facebook.com/denricc" target="_blank" rel="noopener noreferrer">Facebook</a>
+      <a href="https://www.instagram.com/denrikkkkkk/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    </nav>
+  </footer>
   <script>
     "use strict";
 
-    let gardenCount = 0;
-    let greensCount = 0;
-    let soupCount = 0;
-    let cakeCount = 0;
+    let burgerCount = 0;
+    let friesCount = 0;
+    let friedChickenCount = 0;
+    let spicyBurgerCount = 0;
+    let nuggetsCount = 0;
+    let onionRingsCount = 0;
 
-    const gardenPrice = 8.50;
-    const greensPrice = 7.25;
-    const soupPrice = 5.75;
-    const cakePrice = 4.00;
+    const burgerPrice = 80.00;
+    const friesPrice = 50.00;
+    const friedChickenPrice = 100.00;
+    const spicyBurgerPrice = 95.00;
+    const nuggetsPrice = 60.00;
+    const onionRingsPrice = 55.00;
 
     const cartItems = document.getElementById("cart-items");
     const totalDisplay = document.getElementById("total");
@@ -448,15 +674,15 @@
     const changeAmount = document.getElementById("change-amount");
 
     function money(amount) {
-      return "$" + amount.toFixed(2);
+      return "₱" + amount.toFixed(2);
     }
 
     function getItemCount() {
-      return gardenCount + greensCount + soupCount + cakeCount;
+      return burgerCount + friesCount + friedChickenCount + spicyBurgerCount + nuggetsCount + onionRingsCount;
     }
 
     function getTotalCents() {
-      return gardenCount * 850 + greensCount * 725 + soupCount * 575 + cakeCount * 400;
+      return burgerCount * 8000 + friesCount * 5000 + friedChickenCount * 10000 + spicyBurgerCount * 9500 + nuggetsCount * 6000 + onionRingsCount * 5500;
     }
 
     function showMessage(text, kind) {
@@ -526,24 +752,32 @@
     function renderCart() {
       cartItems.textContent = "";
       const itemCount = getItemCount();
+      cartItems.classList.toggle("is-empty", itemCount === 0);
 
       if (itemCount === 0) {
         const empty = document.createElement("div");
         empty.className = "empty";
-        const icon = document.createElement("div");
+        const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         icon.className = "empty-icon";
+        icon.setAttribute("viewBox", "0 0 72 56");
         icon.setAttribute("aria-hidden", "true");
-        icon.textContent = "🧺";
+        icon.innerHTML = '<line class="sunray" x1="36" y1="2" x2="36" y2="12"></line>' +
+          '<line class="sunray" x1="10" y1="13" x2="17" y2="20"></line>' +
+          '<line class="sunray-muted" x1="62" y1="13" x2="55" y2="20"></line>' +
+          '<path d="M13 27h46l-5 21a5 5 0 0 1-5 4H23a5 5 0 0 1-5-4z"></path>' +
+          '<path d="M20 27l6-9h20l6 9"></path>';
         const hint = document.createElement("p");
-        hint.textContent = "Your order is empty for now.";
+        hint.textContent = "Your order is empty. Add a menu item to get started.";
         empty.appendChild(icon);
         empty.appendChild(hint);
         cartItems.appendChild(empty);
       } else {
-        addCartRow("Garden focaccia", "🥪", gardenCount, gardenPrice, "garden");
-        addCartRow("Market greens", "🥗", greensCount, greensPrice, "greens");
-        addCartRow("Tomato & basil soup", "🍲", soupCount, soupPrice, "soup");
-        addCartRow("Lemon olive cake", "🍰", cakeCount, cakePrice, "cake");
+        addCartRow("Classic Burger", "🍔", burgerCount, burgerPrice, "burger");
+        addCartRow("Crispy Fries", "🍟", friesCount, friesPrice, "fries");
+        addCartRow("Fried Chicken", "🍗", friedChickenCount, friedChickenPrice, "friedChicken");
+        addCartRow("Spicy Chicken Burger", "🍔", spicyBurgerCount, spicyBurgerPrice, "spicyBurger");
+        addCartRow("Chicken Nuggets", "🍗", nuggetsCount, nuggetsPrice, "nuggets");
+        addCartRow("Onion Rings", "🧅", onionRingsCount, onionRingsPrice, "onionRings");
       }
 
       countDisplay.textContent = String(itemCount);
@@ -555,17 +789,23 @@
       const amount = document.getElementById(`amount-${itemKey}`).value
 
       switch (itemKey) {
-        case "garden":
-          gardenCount += Number(amount);
+        case "burger":
+          burgerCount += Number(amount);
           break;
-        case "greens":
-          greensCount += Number(amount);
+        case "fries":
+          friesCount += Number(amount);
           break;
-        case "soup":
-          soupCount += Number(amount);
+        case "friedChicken":
+          friedChickenCount += Number(amount);
           break;
-        case "cake":
-          cakeCount += Number(amount);
+        case "spicyBurger":
+          spicyBurgerCount += Number(amount);
+          break;
+        case "nuggets":
+          nuggetsCount += Number(amount);
+          break;
+        case "onionRings":
+          onionRingsCount += Number(amount);
           break;
 
       }
@@ -577,10 +817,12 @@
     }
 
     function removeItem(itemKey) {
-      if (itemKey === "garden" && gardenCount > 0) gardenCount = gardenCount - 1;
-      if (itemKey === "greens" && greensCount > 0) greensCount = greensCount - 1;
-      if (itemKey === "soup" && soupCount > 0) soupCount = soupCount - 1;
-      if (itemKey === "cake" && cakeCount > 0) cakeCount = cakeCount - 1;
+      if (itemKey === "burger" && burgerCount > 0) burgerCount--;
+      if (itemKey === "fries" && friesCount > 0) friesCount--;
+      if (itemKey === "friedChicken" && friedChickenCount > 0) friedChickenCount--;
+      if (itemKey === "spicyBurger" && spicyBurgerCount > 0) spicyBurgerCount--;
+      if (itemKey === "nuggets" && nuggetsCount > 0) nuggetsCount--;
+      if (itemKey === "onionRings" && onionRingsCount > 0) onionRingsCount--;
       changeCard.hidden = true;
       showMessage("One item removed from your order.", "");
       renderCart();
@@ -617,17 +859,23 @@
       showMessage("Payment complete — thank you! Your order is ready.", "success");
     }
 
-    document.getElementById("add-garden").addEventListener("click", function () {
-      addItem("garden");
+    document.getElementById("add-burger").addEventListener("click", function () {
+      addItem("burger");
     });
-    document.getElementById("add-greens").addEventListener("click", function () {
-      addItem("greens");
+    document.getElementById("add-fries").addEventListener("click", function () {
+      addItem("fries");
     });
-    document.getElementById("add-soup").addEventListener("click", function () {
-      addItem("soup");
+    document.getElementById("add-fried-chicken").addEventListener("click", function () {
+      addItem("friedChicken");
     });
-    document.getElementById("add-cake").addEventListener("click", function () {
-      addItem("cake");
+    document.getElementById("add-spicy-burger").addEventListener("click", function () {
+      addItem("spicyBurger");
+    });
+    document.getElementById("add-nuggets").addEventListener("click", function () {
+      addItem("nuggets");
+    });
+    document.getElementById("add-onion-rings").addEventListener("click", function () {
+      addItem("onionRings");
     });
 
     document.getElementById("checkout").addEventListener("click", checkout);
