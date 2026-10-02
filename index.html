@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NAME NG BUSINESS</title>
+  <title>SALO</title>
   <style>
     :root {
       --green: #286a43;
@@ -208,9 +208,30 @@
     }
 
     main>div>section[aria-labelledby="cart-heading"] {
+      position: sticky;
+      top: 112px;
+      align-self: start;
       display: flex;
       flex-direction: column;
-      min-height: 620px;
+      min-height: 520px;
+      padding: 34px 22px 22px;
+      border: 8px solid var(--dark-green);
+      border-radius: 28px;
+      background: #fffdf7;
+      box-shadow: 0 16px 32px rgb(30 66 45 / 18%);
+    }
+
+    .bag-handle {
+      position: absolute;
+      width: 116px;
+      height: 56px;
+      left: 50%;
+      top: -62px;
+      transform: translateX(-50%);
+      border: 9px solid var(--dark-green);
+      border-bottom: 0;
+      border-radius: 70px 70px 0 0;
+      pointer-events: none;
     }
 
     article h3 {
@@ -256,6 +277,9 @@
       font-size: 18px;
     }
 
+    #cart-heading { color: var(--dark-green); font-size: 23px !important; }
+    #cart-count { color: var(--green); }
+
     .item-field {
       display: flex;
       align-items: center;
@@ -289,10 +313,9 @@
       height: 0;
       min-height: 280px;
       overflow-y: auto;
-      border-top: 1px solid black;
-      border-bottom: 1px solid black;
-      padding-top: 2px;
-      padding-bottom: 2px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px dashed var(--border-strong);
+      padding: 4px 0 8px;
     }
 
     #cart-items.is-empty {
@@ -306,23 +329,27 @@
       align-items: center;
     }
 
-    #badge {
-      padding: 8px;
-      background-color: color-mix(in srgb, var(--yellow) 10%, transparent);
-      border: 2px solid var(--yellow);
-      border-radius: 8px;
-      font-size: small;
-      color: var(--yellow);
-      font-weight: bold;
-    }
 
     .cart-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 0;
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
       border-bottom: 1px solid var(--border-soft);
+      animation: cart-item-in 260ms ease both;
     }
+
+    @keyframes cart-item-in {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .row-thumbnail { width: 54px; height: 54px; object-fit: cover; border-radius: 12px; }
+    .row-main { min-width: 0; }
+    .row-controls { display: flex; align-items: center; gap: 7px; margin-top: 7px; }
+    .row-controls button { min-width: 28px; padding: 4px 8px; border-radius: 8px; background: #f2eee2; color: var(--dark-green); font-weight: 700; }
+    .row-controls button:hover { background: var(--yellow); }
+    .row-quantity { min-width: 18px; text-align: center; font-size: 13px; }
 
     .row-name {
       font-weight: 700;
@@ -336,8 +363,9 @@
 
     .row-end {
       display: flex;
-      align-items: center;
-      gap: 8px;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 9px;
     }
 
     .row-price {
@@ -346,8 +374,8 @@
     }
 
     .remove-button {
-      padding: 3px 8px;
-      background-color: var(--border-soft);
+      padding: 4px 8px;
+      background-color: #fff0d7;
       color: var(--ghost-text);
     }
 
@@ -394,6 +422,10 @@
       margin: 14px 0;
     }
 
+    #total { float: right; color: var(--dark-green); font-size: 22px; }
+    #checkout { min-height: 50px; border-radius: 18px; background: var(--dark-green); font-weight: 700; font-size: 16px; }
+    #checkout:hover { background: var(--green); }
+
     label {
       display: block;
       margin: 14px 0 6px;
@@ -417,8 +449,10 @@
     @media (prefers-reduced-motion: reduce) {
       .product-card,
       .product-image,
-      button {
+      button,
+      .cart-row {
         transition: none;
+        animation: none;
       }
 
       .product-card:hover,
@@ -479,6 +513,9 @@
       main>div { grid-template-columns: 1fr; }
       main>div>section[aria-labelledby="cart-heading"] {
         min-height: 0;
+        position: relative;
+        top: auto;
+        margin-top: 52px;
       }
 
       main>div>section[aria-labelledby="cart-heading"]>* {
@@ -515,18 +552,20 @@
       .field-amount { gap: 5px; }
       .field-amount input { width: 48px; max-width: 48px; }
       .field-amount button, .item-field>button { min-width: 36px; padding: 8px 10px; }
-      main>div>section[aria-labelledby="cart-heading"] { padding: 12px; }
-      .cart-row { gap: 8px; flex-wrap: wrap; }
+      main>div>section[aria-labelledby="cart-heading"] { padding: 30px 12px 12px; }
+      .cart-row { grid-template-columns: 46px minmax(0, 1fr) auto; gap: 7px; }
+      .row-thumbnail { width: 46px; height: 46px; }
       .row-end { gap: 6px; }
       footer { flex-direction: column; align-items: flex-start; }
     }
+
   </style>
 </head>
 
 <body>
   <header>
     <a class="brand" href="#welcome-heading" aria-label="Sale, home">
-      <img src="sale-logo.png" alt="SALO food logo">
+      <img src="logo.png" alt="SALO food logo">
     </a>
     <nav class="primary-nav" aria-label="Main navigation">
       <a href="#welcome-heading">Home</a>
@@ -618,14 +657,13 @@
       </section>
 
       <section aria-labelledby="cart-heading">
+        <div class="bag-handle" aria-hidden="true"></div>
         <div class="section-heading">
-          <h2 id="cart-heading">Your order (<span id="cart-count">0</span>)</h2>
-          <p id="badge">Order 001</p>
+          <h2 id="cart-heading">Your Order (<span id="cart-count">0</span>)</h2>
         </div>
-        
 
         <div id="cart-items" aria-live="polite"></div>
-        <p>Order total: <strong id="total">$0.00</strong></p>
+        <p>Subtotal / order total: <strong id="total">₱0.00</strong></p>
 
 
 
@@ -633,7 +671,7 @@
         <input id="cash" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"
           aria-describedby="message">
 
-        <button id="checkout" type="button">Complete checkout</button>
+        <button id="checkout" type="button">Place Order</button>
         <p id="message" role="status" aria-live="polite"></p>
         <p id="change-card" hidden>
           Change due: <strong id="change-amount">$0.00</strong>
@@ -672,6 +710,9 @@
     const message = document.getElementById("message");
     const changeCard = document.getElementById("change-card");
     const changeAmount = document.getElementById("change-amount");
+    const productImages = Object.fromEntries(Array.from(document.querySelectorAll(".product-card"), card => [
+      card.querySelector("h3").textContent.trim(), card.querySelector("img").src
+    ]));
 
     function money(amount) {
       return "₱" + amount.toFixed(2);
@@ -691,19 +732,20 @@
       if (kind) message.classList.add(kind);
     }
 
-    function addCartRow(name, icon, quantity, price, itemKey) {
+    function addCartRow(name, quantity, price, itemKey) {
       if (quantity === 0) return;
 
       const row = document.createElement("div");
       row.className = "cart-row";
 
+      const thumbnail = document.createElement("img");
+      thumbnail.className = "row-thumbnail";
+      thumbnail.src = productImages[name];
+      thumbnail.alt = "";
+      thumbnail.loading = "lazy";
+
       const main = document.createElement("div");
       main.className = "row-main";
-
-      const iconElement = document.createElement("span");
-      iconElement.className = "row-icon";
-      iconElement.setAttribute("aria-hidden", "true");
-      iconElement.textContent = icon;
 
       const details = document.createElement("div");
       const title = document.createElement("div");
@@ -711,11 +753,28 @@
       title.textContent = name;
       const quantityText = document.createElement("div");
       quantityText.className = "row-detail";
-      quantityText.textContent = quantity + " × " + money(price);
+      quantityText.textContent = money(price) + " each";
       details.appendChild(title);
       details.appendChild(quantityText);
-      main.appendChild(iconElement);
       main.appendChild(details);
+
+      const controls = document.createElement("div");
+      controls.className = "row-controls";
+      const minusButton = document.createElement("button");
+      minusButton.type = "button";
+      minusButton.textContent = "-";
+      minusButton.setAttribute("aria-label", "Remove one " + name);
+      minusButton.addEventListener("click", function () { removeItem(itemKey); });
+      const quantityDisplay = document.createElement("span");
+      quantityDisplay.className = "row-quantity";
+      quantityDisplay.textContent = String(quantity);
+      const plusButton = document.createElement("button");
+      plusButton.type = "button";
+      plusButton.textContent = "+";
+      plusButton.setAttribute("aria-label", "Add one " + name);
+      plusButton.addEventListener("click", function () { addItem(itemKey); });
+      controls.append(minusButton, quantityDisplay, plusButton);
+      main.appendChild(controls);
 
       const end = document.createElement("div");
       end.className = "row-end";
@@ -726,24 +785,15 @@
       const removeButton = document.createElement("button");
       removeButton.className = "remove-button";
       removeButton.type = "button";
-      removeButton.textContent = "-";
-      removeButton.setAttribute("aria-label", "Remove one " + name);
+      removeButton.textContent = "×";
+      removeButton.setAttribute("aria-label", "Remove " + name + " from order");
       removeButton.addEventListener("click", function () {
-        removeItem(itemKey);
-      });
-
-      const addButton = document.createElement("button");
-      addButton.className = "remove-button";
-      addButton.type = "button";
-      addButton.textContent = "+";
-      addButton.setAttribute("aria-label", "Add one " + name);
-      addButton.addEventListener("click", function () {
-        addItem(itemKey);
+        removeAllItem(itemKey);
       });
 
       end.appendChild(linePrice);
       end.appendChild(removeButton);
-      end.appendChild(addButton);
+      row.appendChild(thumbnail);
       row.appendChild(main);
       row.appendChild(end);
       cartItems.appendChild(row);
@@ -772,12 +822,12 @@
         empty.appendChild(hint);
         cartItems.appendChild(empty);
       } else {
-        addCartRow("Classic Burger", "🍔", burgerCount, burgerPrice, "burger");
-        addCartRow("Crispy Fries", "🍟", friesCount, friesPrice, "fries");
-        addCartRow("Fried Chicken", "🍗", friedChickenCount, friedChickenPrice, "friedChicken");
-        addCartRow("Spicy Chicken Burger", "🍔", spicyBurgerCount, spicyBurgerPrice, "spicyBurger");
-        addCartRow("Chicken Nuggets", "🍗", nuggetsCount, nuggetsPrice, "nuggets");
-        addCartRow("Onion Rings", "🧅", onionRingsCount, onionRingsPrice, "onionRings");
+        addCartRow("Classic Burger", burgerCount, burgerPrice, "burger");
+        addCartRow("Crispy Fries", friesCount, friesPrice, "fries");
+        addCartRow("Fried Chicken", friedChickenCount, friedChickenPrice, "friedChicken");
+        addCartRow("Spicy Chicken Burger", spicyBurgerCount, spicyBurgerPrice, "spicyBurger");
+        addCartRow("Chicken Nuggets", nuggetsCount, nuggetsPrice, "nuggets");
+        addCartRow("Onion Rings", onionRingsCount, onionRingsPrice, "onionRings");
       }
 
       countDisplay.textContent = String(itemCount);
@@ -825,6 +875,20 @@
       if (itemKey === "onionRings" && onionRingsCount > 0) onionRingsCount--;
       changeCard.hidden = true;
       showMessage("One item removed from your order.", "");
+      renderCart();
+    }
+
+    function removeAllItem(itemKey) {
+      switch (itemKey) {
+        case "burger": burgerCount = 0; break;
+        case "fries": friesCount = 0; break;
+        case "friedChicken": friedChickenCount = 0; break;
+        case "spicyBurger": spicyBurgerCount = 0; break;
+        case "nuggets": nuggetsCount = 0; break;
+        case "onionRings": onionRingsCount = 0; break;
+      }
+      changeCard.hidden = true;
+      showMessage("Item removed from your order.", "");
       renderCart();
     }
 
