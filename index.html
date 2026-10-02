@@ -597,7 +597,7 @@
       <section aria-labelledby="products-heading">
         <div class="section-heading">
           <h2 id="products-heading">Menu items</h2>
-          <p>6 items available</p>
+          <p>4 items available</p>
         </div>
         <hr style="margin-bottom: 20px;">
         <div class="product-grid">
@@ -629,7 +629,7 @@
               <p>Crispy golden chicken with a tender and juicy center.</p>
               <p class="price">Price: ₱100.00</p>
               <div class="item-field">
-                <button id="add-fried-chicken" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('friedChicken')">-</button><input type="number" id="amount-friedChicken" value="1"><button onclick="incrementItem('friedChicken')">+</button></div>
+                <button id="add-fried-chicken" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('chicken')">-</button><input type="number" id="amount-chicken" value="1"><button onclick="incrementItem('chicken')">+</button></div>
               </div>
             </div>
           </article>
@@ -645,27 +645,6 @@
             </div>
           </article>
 
-          <article class="product-card">
-            <img class="product-image" src="https://cdnd.techpack.mn/ext/2011555/Chicken_nuggets.jpg" alt="Crispy chicken nuggets served with ketchup" loading="lazy">
-            <div class="product-info"><h3>Chicken Nuggets</h3>
-              <p>Bite-sized and crunchy chicken nuggets.</p>
-              <p class="price">Price: ₱60.00</p>
-              <div class="item-field">
-                <button id="add-nuggets" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('nuggets')">-</button><input type="number" id="amount-nuggets" value="1"><button onclick="incrementItem('nuggets')">+</button></div>
-              </div>
-            </div>
-          </article>
-
-          <article class="product-card">
-            <img class="product-image" src="https://images.deliveryhero.io/image/global-menu-service/GV_IT/vendor/678076/product/9007146515/fa0f9450-6fec-4ed0-be8a-37cfbce976fc.jpg" alt="Crispy golden onion rings with ketchup" loading="lazy">
-            <div class="product-info"><h3>Onion Rings</h3>
-              <p>Crispy battered onion rings, served hot.</p>
-              <p class="price">Price: ₱55.00</p>
-              <div class="item-field">
-                <button id="add-onion-rings" type="button"><span class="button-content"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0M12 12v5m-2.5-2.5h5"></path></svg>Add</span></button><div class="field-amount"><button onclick="reduceItem('onionRings')">-</button><input type="number" id="amount-onionRings" value="1"><button onclick="incrementItem('onionRings')">+</button></div>
-              </div>
-            </div>
-          </article>
         </div>
       </section>
 
@@ -702,14 +681,10 @@
   <script>
     "use strict";
 
-    const products = {
-      burger: { name: "Classic Burger", price: 80, count: 0 },
-      fries: { name: "Crispy Fries", price: 50, count: 0 },
-      friedChicken: { name: "Fried Chicken", price: 100, count: 0 },
-      spicyBurger: { name: "Spicy Chicken Burger", price: 95, count: 0 },
-      nuggets: { name: "Chicken Nuggets", price: 60, count: 0 },
-      onionRings: { name: "Onion Rings", price: 55, count: 0 }
-    };
+    let burgerCount = 0;
+    let friesCount = 0;
+    let chickenCount = 0;
+    let spicyBurgerCount = 0;
 
     const cartItems = document.getElementById("cart-items");
     const totalDisplay = document.getElementById("total");
@@ -719,20 +694,16 @@
     const changeCard = document.getElementById("change-card");
     const changeAmount = document.getElementById("change-amount");
     const clearOrderButton = document.getElementById("clear-order");
-    const productImages = Object.fromEntries(Array.from(document.querySelectorAll(".product-card"), card => [
-      card.querySelector("h3").textContent.trim(), card.querySelector("img").src
-    ]));
-
     function money(amount) {
       return "₱" + amount.toFixed(2);
     }
 
     function getItemCount() {
-      return Object.values(products).reduce((sum, product) => sum + product.count, 0);
+      return burgerCount + friesCount + chickenCount + spicyBurgerCount;
     }
 
     function getTotalCents() {
-      return Object.values(products).reduce((sum, product) => sum + product.count * product.price * 100, 0);
+      return burgerCount * 8000 + friesCount * 5000 + chickenCount * 10000 + spicyBurgerCount * 9500;
     }
 
     function showMessage(text, kind) {
@@ -749,7 +720,10 @@
 
       const thumbnail = document.createElement("img");
       thumbnail.className = "row-thumbnail";
-      thumbnail.src = productImages[name];
+      if (itemKey === "burger") thumbnail.src = document.querySelector("#add-burger").closest(".product-card").querySelector("img").src;
+      if (itemKey === "fries") thumbnail.src = document.querySelector("#add-fries").closest(".product-card").querySelector("img").src;
+      if (itemKey === "chicken") thumbnail.src = document.querySelector("#add-fried-chicken").closest(".product-card").querySelector("img").src;
+      if (itemKey === "spicyBurger") thumbnail.src = document.querySelector("#add-spicy-burger").closest(".product-card").querySelector("img").src;
       thumbnail.alt = "";
       thumbnail.loading = "lazy";
 
@@ -838,9 +812,10 @@
         empty.appendChild(hint);
         cartItems.appendChild(empty);
       } else {
-        Object.entries(products).forEach(([key, product]) => {
-          addCartRow(product.name, product.count, product.price, key);
-        });
+        addCartRow("Classic Burger", burgerCount, 80, "burger");
+        addCartRow("Crispy Fries", friesCount, 50, "fries");
+        addCartRow("Fried Chicken", chickenCount, 100, "chicken");
+        addCartRow("Spicy Chicken Burger", spicyBurgerCount, 95, "spicyBurger");
       }
 
       countDisplay.textContent = String(itemCount);
@@ -849,7 +824,11 @@
 
     function addItem(itemKey) {
       const amountInput = document.getElementById(`amount-${itemKey}`);
-      products[itemKey].count += Math.max(1, Number(amountInput.value) || 1);
+      const amount = Math.max(1, Number(amountInput.value) || 1);
+      if (itemKey === "burger") burgerCount += amount;
+      if (itemKey === "fries") friesCount += amount;
+      if (itemKey === "chicken") chickenCount += amount;
+      if (itemKey === "spicyBurger") spicyBurgerCount += amount;
       amountInput.value = 1;
       changeCard.hidden = true;
       showMessage("Added to your order.", "");
@@ -857,21 +836,30 @@
     }
 
     function removeItem(itemKey) {
-      products[itemKey].count = Math.max(0, products[itemKey].count - 1);
+      if (itemKey === "burger" && burgerCount > 0) burgerCount--;
+      if (itemKey === "fries" && friesCount > 0) friesCount--;
+      if (itemKey === "chicken" && chickenCount > 0) chickenCount--;
+      if (itemKey === "spicyBurger" && spicyBurgerCount > 0) spicyBurgerCount--;
       changeCard.hidden = true;
       showMessage("One item removed from your order.", "");
       renderCart();
     }
 
     function removeAllItem(itemKey) {
-      products[itemKey].count = 0;
+      if (itemKey === "burger") burgerCount = 0;
+      if (itemKey === "fries") friesCount = 0;
+      if (itemKey === "chicken") chickenCount = 0;
+      if (itemKey === "spicyBurger") spicyBurgerCount = 0;
       changeCard.hidden = true;
       showMessage("Item removed from your order.", "");
       renderCart();
     }
 
     function clearOrder() {
-      Object.values(products).forEach(product => { product.count = 0; });
+      burgerCount = 0;
+      friesCount = 0;
+      chickenCount = 0;
+      spicyBurgerCount = 0;
       cashInput.value = "";
       changeCard.hidden = true;
       showMessage("Order cleared.", "");
@@ -909,10 +897,10 @@
       showMessage("Payment complete — thank you! Your order is ready.", "success");
     }
 
-    Object.keys(products).forEach(itemKey => {
-      const buttonId = itemKey.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
-      document.getElementById(`add-${buttonId}`).addEventListener("click", () => addItem(itemKey));
-    });
+    document.getElementById("add-burger").addEventListener("click", () => addItem("burger"));
+    document.getElementById("add-fries").addEventListener("click", () => addItem("fries"));
+    document.getElementById("add-fried-chicken").addEventListener("click", () => addItem("chicken"));
+    document.getElementById("add-spicy-burger").addEventListener("click", () => addItem("spicyBurger"));
 
     document.getElementById("checkout").addEventListener("click", checkout);
     clearOrderButton.addEventListener("click", clearOrder);
